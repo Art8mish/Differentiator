@@ -414,7 +414,7 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
         right_node = SimplifyExpression(curr_node->right);
         ERROR_CHECK(right_node == NULL, NULL);
     }
-    //........................
+    //......................
 
     if ( left_node->value->type_arg == TYPE_NUM &&
         right_node->value->type_arg == TYPE_NUM)
