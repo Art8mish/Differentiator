@@ -1,0 +1,38 @@
+
+{ "animal" 
+	{ "likes banana" 
+		{ "king of monkeys" 
+			{ "does labs" 
+				{ "Ars" }
+
+				{ "gorilla" }
+			}
+
+			{ "baboon" }
+		}
+
+		{ "has beak" 
+			{ "duck" }
+
+			{ "queen of animals" 
+				{ "poltorashka" }
+
+				{ "lion" }
+			}
+		}
+	}
+
+	{ "human" 
+		{ "pop-star" 
+			{ "Michael Jackson" }
+
+			{ "Anton" }
+		}
+
+		{ "cyborg" 
+			{ "T-800" }
+
+			{ "Buratino" }
+		}
+	}
+}
