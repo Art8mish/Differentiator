@@ -124,7 +124,7 @@ int CreateTreeNodes(const struct TreeNode *curr_node, FILE *graph_f)
         case DIV_OP : fprintf(graph_f, "/");
                       break;
 
-        case DGR_OP : fprintf(graph_f, "^");
+        case POW_OP : fprintf(graph_f, "^");
                       break;
 
         case SIN_OP : fprintf(graph_f, "sin");
@@ -133,10 +133,7 @@ int CreateTreeNodes(const struct TreeNode *curr_node, FILE *graph_f)
         case COS_OP : fprintf(graph_f, "cos");
                       break;
         
-        case TG_OP  : fprintf(graph_f, "tg");
-                      break;
-
-        case CTG_OP : fprintf(graph_f, "ctg");
+        case TAN_OP  : fprintf(graph_f, "tg");
                       break;
 
         case ASIN_OP: fprintf(graph_f, "arcsin");
@@ -145,10 +142,16 @@ int CreateTreeNodes(const struct TreeNode *curr_node, FILE *graph_f)
         case ACOS_OP: fprintf(graph_f, "arccos");
                       break;
 
-        case ATG_OP : fprintf(graph_f, "arctg");
+        case ATAN_OP : fprintf(graph_f, "arctg");
                       break;
 
-        case ACTG_OP: fprintf(graph_f, "arcctg");
+        case SINH_OP : fprintf(graph_f, "sh");
+                      break;
+
+        case COSH_OP : fprintf(graph_f, "ch");
+                      break;
+        
+        case TANH_OP  : fprintf(graph_f, "th");
                       break;
 
         case LN_OP  : fprintf(graph_f, "ln");
@@ -157,8 +160,12 @@ int CreateTreeNodes(const struct TreeNode *curr_node, FILE *graph_f)
         default     : fprintf(graph_f, "ERROR");
                       break;
     }
-    fprintf(graph_f, " (%d), num = %lf, var = %d", curr_node->value->diff_arg->op,
-                                        curr_node->value->diff_arg->num, curr_node->value->diff_arg->var);
+    fprintf(graph_f, " (%d), num = %lf, ", curr_node->value->diff_arg->op,
+                                        curr_node->value->diff_arg->num);
+    if (curr_node->value->diff_arg->var == PSN_VAR)
+        fprintf(graph_f, "var = 0");
+    else
+        fprintf(graph_f, "var = %c", curr_node->value->diff_arg->var);
 
 
 

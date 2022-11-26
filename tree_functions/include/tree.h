@@ -89,7 +89,7 @@ enum TreeError
     ERROR_TREE                   = 1,
     ERROR_CREATE_NODES           = 2,
     ERROR_TREE_VERIFICATION      = 5,
-    ERROR_NODE_DTOR              = 6,
+    ERROR_TREE_NODE_DTOR         = 6,
     ERROR_TREE_INCORRECT_OP      = 8,
     ERROR_TREE_CHECK_ERROR       = 11,
     ERROR_SAVE_NODE              = 12,
@@ -111,6 +111,12 @@ enum TreeInsertPath
     TREE_INSERT_FIRST = 0,
     TREE_INSERT_LEFT  = 1,
     TREE_INSERT_RIGHT = 2,
+};
+
+enum TreeTiePath
+{
+    TREE_TIE_LEFT  = 1,
+    TREE_TIE_RIGHT = 2,
 };
 
 enum TreeErrorMask
@@ -135,21 +141,19 @@ struct Tree
 
 struct Tree *TreeCtor(void);
 int TreeDtor(struct Tree *tree);
-int TreeNodeDtor(struct Tree *tree, struct TreeNode *curr_node);
+int TreeNodeDtor(struct TreeNode *curr_node);
 struct TreeNode *TreeNodeCtor(tree_elem_t arg, struct TreeNode *left_node, struct TreeNode *right_node);
 
 struct TreeNode *TreeNodeCopy(struct TreeNode *curr_node);
 
-int TreeNodeTie(struct Tree *tree, struct TreeNode *parent_node,
-                struct TreeNode *curr_node, int insert_path);
+int TreeNodeTie(struct TreeNode *parent_node,
+                struct TreeNode *curr_node, TreeTiePath tie_path);
 
-int TreeInsertLatin(struct Tree *tree, struct TreeNode *parent_node, tree_elem_t arg);
-int TreeInsertArabic(struct Tree *tree, struct TreeNode *parent_node, tree_elem_t arg);
+int TreeInsertLatin(struct TreeNode *parent_node, tree_elem_t arg);
+int TreeInsertArabic(struct TreeNode *parent_node, tree_elem_t arg);
 
 int TreeInsert(struct Tree *tree, struct TreeNode *parent_node,
                tree_elem_t arg, TreeInsertPath insert_path);
-    
-int TreeRemove(struct Tree *tree, struct TreeNode *node_ptr);
     
 int TreeVerification(struct Tree *tree);
 int TreeCheckError(struct Tree *tree);

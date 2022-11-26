@@ -50,37 +50,33 @@ int TreeDtor(struct Tree *tree)
 
     VERIFICATION(tree);
 
-    int node_dtor_err = TreeNodeDtor(tree, tree->root);
-    ERROR_CHECK(node_dtor_err, ERROR_NODE_DTOR);
+    int node_dtor_err = TreeNodeDtor(tree->root);
+    ERROR_CHECK(node_dtor_err, ERROR_TREE_NODE_DTOR);
 
     free(tree);
 
     return SUCCESS;
 }
 
-int TreeNodeDtor(struct Tree *tree, struct TreeNode *curr_node)
+int TreeNodeDtor(struct TreeNode *curr_node)
 {
-    ERROR_CHECK(tree      == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK(curr_node == NULL, ERROR_NULL_PTR);
-
-    VERIFICATION(tree);
+    if (curr_node == NULL)
+        return SUCCESS;
 
     if (curr_node->left != NULL)
     {
-        int node_dtor_err = TreeNodeDtor(tree, curr_node->left);
-        ERROR_CHECK(node_dtor_err, ERROR_NODE_DTOR);
+        int node_dtor_err = TreeNodeDtor(curr_node->left);
+        ERROR_CHECK(node_dtor_err, ERROR_TREE_NODE_DTOR);
     }
 
     if (curr_node->right != NULL)
     {
-        int node_dtor_err = TreeNodeDtor(tree, curr_node->right);
-        ERROR_CHECK(node_dtor_err, ERROR_NODE_DTOR);
+        int node_dtor_err = TreeNodeDtor(curr_node->right);
+        ERROR_CHECK(node_dtor_err, ERROR_TREE_NODE_DTOR);
     }
 
     FREE_TREE_NODE_VALUE(curr_node);
     free(curr_node);
-
-    VERIFICATION(tree);
 
     return SUCCESS;
 }
@@ -112,11 +108,7 @@ struct TreeNode *TreeNodeCopy(struct TreeNode *curr_node)
     if (curr_node == NULL)
         return NULL;
 
-    tree_elem_t val = NULL;
-    CREATE_TREE_NODE_VALUE(val, NULL);
-    COPY_TREE_VAl(val, curr_node->value);
-
-    struct TreeNode *left_node  = NULL;
+    struct TreeNode *left_node = NULL;
     if (curr_node->left != NULL)
     {
         left_node = TreeNodeCopy(curr_node->left);
@@ -130,51 +122,54 @@ struct TreeNode *TreeNodeCopy(struct TreeNode *curr_node)
         ERROR_CHECK(right_node == NULL, NULL);
     }
 
+    tree_elem_t val = NULL;
+    CREATE_TREE_NODE_VALUE(val, NULL);
+    COPY_TREE_VAl(val, curr_node->value);
+
     struct TreeNode *new_node = TreeNodeCtor(val, left_node, right_node);
     ERROR_CHECK(new_node == NULL, NULL);
 
     return new_node;
 }
 
-int TreeNodeTie(struct Tree *tree, struct TreeNode *parent_node,
-                struct TreeNode *curr_node, int insert_path)
+int TreeNodeTie(struct TreeNode *parent_node,
+                struct TreeNode *curr_node, TreeTiePath tie_path)
 {
-    ERROR_CHECK(tree      == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK(curr_node == NULL, ERROR_NULL_PTR);
+    ERROR_CHECK(parent_node == NULL, ERROR_NULL_PTR);
+    ERROR_CHECK(curr_node   == NULL, ERROR_NULL_PTR);
 
-    VERIFICATION(tree);
-
-    int tree_remove_err = 0;
-    switch (insert_path)
+    int tree_node_dtor_err = 0;
+    switch (tie_path)
     {
-        case TREE_INSERT_FIRST: tree->root = curr_node;
-                                break;
-        case TREE_INSERT_LEFT : ERROR_CHECK(parent_node == NULL, ERROR_NULL_PTR);
-                                tree_remove_err = TreeRemove(tree, parent_node->left);
-                                ERROR_CHECK(tree_remove_err, ERROR_TREE_REMOVE);
+        case TREE_TIE_LEFT  : 
+            {
+                tree_node_dtor_err = TreeNodeDtor(parent_node->left);
+                ERROR_CHECK(tree_node_dtor_err, ERROR_TREE_NODE_DTOR);
 
-                                parent_node->left = curr_node;
-                                break;
+                parent_node->left = curr_node;
+                curr_node->parent = parent_node;
+                break;
+            }
 
-        case TREE_INSERT_RIGHT: ERROR_CHECK(parent_node == NULL, ERROR_NULL_PTR);
-                                tree_remove_err = TreeRemove(tree, parent_node->right);
-                                ERROR_CHECK(tree_remove_err, ERROR_TREE_REMOVE);
+        case TREE_TIE_RIGHT : 
+            {
+                tree_node_dtor_err = TreeNodeDtor(parent_node->right);
+                ERROR_CHECK(tree_node_dtor_err, ERROR_TREE_NODE_DTOR);
 
-                                parent_node->right = curr_node;
-                                break;
+                parent_node->right = curr_node;
+                curr_node->parent  = parent_node;
+                break;
+            }
     
-        default:                return ERROR_WRONG_TREE_INSERT_PATH;
-                                break;
+        default:              return ERROR_WRONG_TREE_INSERT_PATH;
+                              break;
     }
 
-    VERIFICATION(tree);
-    
     return SUCCESS;
 }
 
-int TreeInsertLatin(struct Tree *tree, struct TreeNode *parent_node, tree_elem_t arg)
+int TreeInsertLatin(struct TreeNode *parent_node, tree_elem_t arg)
 {
-    ERROR_CHECK(tree        == NULL, ERROR_NULL_PTR);
     ERROR_CHECK(parent_node == NULL, ERROR_NULL_PTR);
     CHECK_TREE_ELEM(arg, ERROR_INCORRECT_TREE_ELEM);
 
@@ -190,7 +185,7 @@ int TreeInsertLatin(struct Tree *tree, struct TreeNode *parent_node, tree_elem_t
 
     if (parent_node->left == NULL)
     {
-        int tree_tie_err = TreeNodeTie(tree, parent_node, curr_node, TREE_INSERT_LEFT);
+        int tree_tie_err = TreeNodeTie(parent_node, curr_node, TREE_TIE_LEFT);
         ERROR_CHECK(tree_tie_err, ERROR_TREE_TIE);
 
         return SUCCESS;
@@ -198,16 +193,15 @@ int TreeInsertLatin(struct Tree *tree, struct TreeNode *parent_node, tree_elem_t
 
     if (parent_node->right == NULL)
     {
-        int tree_tie_err = TreeNodeTie(tree, parent_node, curr_node, TREE_INSERT_RIGHT);
+        int tree_tie_err = TreeNodeTie(parent_node, curr_node, TREE_TIE_RIGHT);
         ERROR_CHECK(tree_tie_err, ERROR_TREE_TIE);
     }
 
     return SUCCESS;
 }
 
-int TreeInsertArabic(struct Tree *tree, struct TreeNode *parent_node, tree_elem_t arg)
+int TreeInsertArabic(struct TreeNode *parent_node, tree_elem_t arg)
 {
-    ERROR_CHECK(tree        == NULL, ERROR_NULL_PTR);
     ERROR_CHECK(parent_node == NULL, ERROR_NULL_PTR);
     CHECK_TREE_ELEM(arg, ERROR_INCORRECT_TREE_ELEM);
 
@@ -223,7 +217,7 @@ int TreeInsertArabic(struct Tree *tree, struct TreeNode *parent_node, tree_elem_
 
     if (parent_node->right == NULL)
     {
-        int tree_tie_err = TreeNodeTie(tree, parent_node, curr_node, TREE_INSERT_LEFT);
+        int tree_tie_err = TreeNodeTie(parent_node, curr_node, TREE_TIE_LEFT);
         ERROR_CHECK(tree_tie_err, ERROR_TREE_TIE);
 
         return SUCCESS;
@@ -231,7 +225,7 @@ int TreeInsertArabic(struct Tree *tree, struct TreeNode *parent_node, tree_elem_
 
     if (parent_node->left == NULL)
     {
-        int tree_tie_err = TreeNodeTie(tree, parent_node, curr_node, TREE_INSERT_RIGHT);
+        int tree_tie_err = TreeNodeTie(parent_node, curr_node, TREE_TIE_RIGHT);
         ERROR_CHECK(tree_tie_err, ERROR_TREE_TIE);
     }
 
@@ -271,23 +265,6 @@ int TreeInsert(struct Tree *tree, struct TreeNode *parent_node,
 
     VERIFICATION(tree);    
 
-    return SUCCESS;
-}
-
-int TreeRemove(struct Tree *tree, struct TreeNode *node_ptr)
-{
-    ERROR_CHECK(tree == NULL, ERROR_NULL_PTR);
-
-    if (node_ptr == NULL)
-        return SUCCESS;
-
-    VERIFICATION(tree);
-
-    int node_dtor_err = TreeNodeDtor(tree, node_ptr);
-    ERROR_CHECK(node_dtor_err, ERROR_NODE_DTOR);
-
-    VERIFICATION(tree);
-    
     return SUCCESS;
 }
 
@@ -356,7 +333,12 @@ int SerializeNode(const struct TreeNode *curr_node, FILE *tree_f)
     {
         case TYPE_PSN : fprintf(tree_f, " TYPE_PSN ");
                         break;
-        case TYPE_NUM : fprintf(tree_f, "%g", curr_node->value->diff_arg->num);
+        case TYPE_NUM : if (COMPARE_DOUBLE(curr_node->value->diff_arg->num, EXP))
+                            fprintf(tree_f, "e");
+                        else if (COMPARE_DOUBLE(curr_node->value->diff_arg->num, PI))
+                            fprintf(tree_f, "pi");
+                        else
+                            fprintf(tree_f, "%g", curr_node->value->diff_arg->num);
                         break;
         case TYPE_OP  :  
                 switch (curr_node->value->diff_arg->op)
@@ -364,48 +346,42 @@ int SerializeNode(const struct TreeNode *curr_node, FILE *tree_f)
                     case PSN_OP :   break;
                     case ADD_OP :   fprintf(tree_f, " + ");
                                     break;
-                    case SUB_OP :   fprintf(tree_f, " - ");
+                    case SUB_OP  :  fprintf(tree_f, " - ");
                                     break;
-                    case MUL_OP :   fprintf(tree_f, " * ");
+                    case MUL_OP  :  fprintf(tree_f, " * ");
                                     break;
-                    case DIV_OP :   fprintf(tree_f, " / ");
+                    case DIV_OP  :  fprintf(tree_f, " / ");
                                     break;
-                    case DGR_OP :   fprintf(tree_f, " ^ ");
+                    case POW_OP  :  fprintf(tree_f, " ^ ");
                                     break;
-                    case SIN_OP :   fprintf(tree_f, "sin ");
+                    case SIN_OP  :  fprintf(tree_f, "sin ");
                                     break;
-                    case COS_OP :   fprintf(tree_f, "cos ");
+                    case COS_OP  :  fprintf(tree_f, "cos ");
                                     break;
-                    case TG_OP  :   fprintf(tree_f, "tg ");
+                    case TAN_OP  :  fprintf(tree_f, "tg ");
                                     break;
-                    case CTG_OP :   fprintf(tree_f, "ctg ");
+                    case ASIN_OP :  fprintf(tree_f, "arcsin ");
                                     break;
-                    case ASIN_OP:   fprintf(tree_f, "arcsin ");
+                    case ACOS_OP :  fprintf(tree_f, "arccos ");
                                     break;
-                    case ACOS_OP:   fprintf(tree_f, "arccos ");
+                    case ATAN_OP :  fprintf(tree_f, "arctg ");
                                     break;
-                    case ATG_OP :   fprintf(tree_f, "arctg ");
+                    case SINH_OP :  fprintf(tree_f, "sh ");
                                     break;
-                    case ACTG_OP:   fprintf(tree_f, "arcctg ");
+                    case COSH_OP :  fprintf(tree_f, "ch ");
                                     break;
-                    case LN_OP  :   fprintf(tree_f, "ln ");
+                    case TANH_OP :  fprintf(tree_f, "th ");
+                                    break;
+                    case LN_OP   :  fprintf(tree_f, "ln ");
                                     break;
                     default:        fprintf(tree_f, "ERROR_OP");
                                     break;
                 }
+                break;
 
-        case TYPE_VAR: 
-                switch (curr_node->value->diff_arg->var)
-                {
-                    case PSN_VAR    :   break;
-                    case X_VAR      :   fprintf(tree_f, "x");
-                                        break;
-                    case CONST_VAR  :   fprintf(tree_f, "y");
-                                        break;
-                    default:            fprintf(tree_f, "ERROR_VAR");
-                                        break;
-                }
-        
+        case TYPE_VAR : fprintf(tree_f, "%c", curr_node->value->diff_arg->var);
+                        break;
+            
         default :   //fprintf(tree_f, " TYPE_ERROR ");
                     break;
     }
@@ -621,25 +597,23 @@ struct TreeNode *GetMul(const char **buf)
     printf("enter mul\n");
     printf("buf = %s\n", *buf);
 
-    struct TreeNode *node = GetDgr(buf);
+    struct TreeNode *node = GetPow(buf);
 
     while (**buf == '*' || **buf == '/')
     {
         int op = **buf;
         (*buf)++;
 
-        struct TreeNode *node2 = GetDgr(buf);
+        struct TreeNode *node2 = GetPow(buf);
 
         struct TreeNode *parent_node = NULL; 
         if (op == '*')
             parent_node = DiffNodeCtor(TYPE_OP, DiffOpCtor(MUL_OP), node, node2);
         else
         {
-            if (node2->value->type_arg == TYPE_NUM && 
-                node2->value->diff_arg->num < EPS)
             ERROR_CHECK(node2->value->type_arg == TYPE_NUM && 
-                        node2->value->diff_arg->num < EPS  &&
-                        node2->value->diff_arg->num > EPS, NULL);
+                        node2->value->diff_arg->num - EPS <= 0  &&
+                        node2->value->diff_arg->num + EPS >= 0, NULL);
             parent_node = DiffNodeCtor(TYPE_OP, DiffOpCtor(DIV_OP), node, node2);
         }
 
@@ -652,7 +626,7 @@ struct TreeNode *GetMul(const char **buf)
     return node;
 }
 
-struct TreeNode *GetDgr(const char **buf)
+struct TreeNode *GetPow(const char **buf)
 {
     SKIP_SPACE_STR(*buf);
     printf("enter dgr\n");
@@ -664,7 +638,7 @@ struct TreeNode *GetDgr(const char **buf)
     {
         (*buf)++;
         struct TreeNode *node2 = GetUnarFunc(buf);
-        struct TreeNode *parent_node = DiffNodeCtor(TYPE_OP, DiffOpCtor(DGR_OP), node, node2); 
+        struct TreeNode *parent_node = DiffNodeCtor(TYPE_OP, DiffOpCtor(POW_OP), node, node2); 
 
         node = parent_node;
     }
@@ -701,10 +675,7 @@ struct TreeNode *GetUnarFunc(const char **buf)
             node = DiffNodeCtor(TYPE_OP, DiffOpCtor(COS_OP), NULL, node2);
 
         else if(strcmp(op, "tg") == 0)
-            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(TG_OP), NULL, node2);
-
-        else if(strcmp(op, "ctg") == 0)
-            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(CTG_OP), NULL, node2);
+            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(TAN_OP), NULL, node2);
 
         else if(strcmp(op, "arcsin") == 0)
             node = DiffNodeCtor(TYPE_OP, DiffOpCtor(ASIN_OP), NULL, node2);
@@ -713,10 +684,16 @@ struct TreeNode *GetUnarFunc(const char **buf)
             node = DiffNodeCtor(TYPE_OP, DiffOpCtor(ACOS_OP), NULL, node2);
 
         else if(strcmp(op, "arctg") == 0)
-            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(ATG_OP), NULL, node2);
+            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(ATAN_OP), NULL, node2);
 
-        else if(strcmp(op, "arcctg") == 0)
-            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(ACTG_OP), NULL, node2);
+        else if(strcmp(op, "sh") == 0)
+            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(SINH_OP), NULL, node2);
+
+        else if(strcmp(op, "ch") == 0)
+            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(COSH_OP), NULL, node2);
+
+        else if(strcmp(op, "th") == 0)
+            node = DiffNodeCtor(TYPE_OP, DiffOpCtor(TANH_OP), NULL, node2);
 
         else if(strcmp(op, "ln") == 0)
         {
@@ -773,13 +750,13 @@ struct TreeNode *GetArg(const char **buf)
 
     struct TreeNode *new_node = TreeNodeCtor(val, NULL, NULL);
     const char *s_old = *buf;
-    if ((**buf >= '0' && **buf <= '9') || **buf == 'P' || **buf == 'e')
+    if ((**buf >= '0' && **buf <= '9') || **buf == 'p' || **buf == 'e')
     {
         printf("enter num\n");
         new_node->value->type_arg = TYPE_NUM;
         diff_num_t num = DIFF_NUM_PSN;
 
-        if (**buf == 'P')
+        if (**buf == 'p')
         {
             (*buf)++;
             ERROR_CHECK(**buf != 'i', NULL);
@@ -803,15 +780,15 @@ struct TreeNode *GetArg(const char **buf)
         new_node->value->diff_arg->num = num;
     }
     
-    else if (**buf >= 'u' && **buf <= 'z')
+    else if (**buf >= 'a' && **buf <= 'z' && 
+             **buf != 's' && **buf != 'c' && **buf != 't' &&
+             **buf != 'a' && **buf != 'l' && **buf != 'p' &&
+             **buf != 'e')
     {
         printf("enter var\n");
         new_node->value->type_arg = TYPE_VAR;
 
-        if (**buf == 'x')
-            new_node->value->diff_arg->var = X_VAR;
-        else
-            new_node->value->diff_arg->var = CONST_VAR;
+        new_node->value->diff_arg->var = **buf;
 
         (*buf)++;
     }

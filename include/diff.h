@@ -4,9 +4,11 @@
 //#include "../onegin_functions/include/onegin_libraries.h"
 #include "../tree_functions/include/tree.h"
 #include "common.h"
+#include "math.h"
 
 typedef double diff_num_t;
 const diff_num_t DIFF_NUM_PSN = 0;
+const char PSN_VAR = '\0';
 
 enum TypeDiffArg
 {
@@ -23,30 +25,25 @@ enum DiffOp
     SUB_OP  = 2,
     MUL_OP  = 3,
     DIV_OP  = 4,
-    DGR_OP  = 5,
+    POW_OP  = 5,
     SIN_OP  = 6,
     COS_OP  = 8,
-    TG_OP   = 9,
-    CTG_OP  = 10,
-    ASIN_OP = 11,
-    ACOS_OP = 12,
-    ATG_OP  = 13,
-    ACTG_OP = 14,
-    LN_OP   = 15,
+    TAN_OP  = 9,
+    ASIN_OP = 10,
+    ACOS_OP = 11,
+    ATAN_OP = 12,
+    SINH_OP = 13,
+    COSH_OP = 14,
+    TANH_OP = 15,
+    LN_OP   = 16,
 };
 
-enum DiffVar
-{
-      PSN_VAR = 0,
-        X_VAR = 1,
-    CONST_VAR = 2,
-};
 
 struct Diff_elem_t
 {
     DiffOp     op  = PSN_OP;
     diff_num_t num = DIFF_NUM_PSN;
-    DiffVar    var = CONST_VAR;
+    char var = '\0';
 };
 
 
@@ -73,25 +70,30 @@ const diff_num_t PI  = 3.1415926535;
 const diff_num_t EXP = 2.7182818284;
 const diff_num_t EPS = 1e-7;
 
+#define COMPARE_DOUBLE(value, num)                               \
+            ((value) - EPS <= (num) && (value) + EPS >= (num))
+
 struct TreeNode *DiffNodeCtor(TypeDiffArg type_value,     struct Diff_elem_t *value, 
                               struct TreeNode *left_node, struct TreeNode *right_node);
 
-struct TreeNode *DifferentiateNode(struct TreeNode *curr_node);
+struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var);
 
-int FindVar(struct TreeNode *curr_node, bool *is_const);
+int FindVar(struct TreeNode *curr_node, char diff_var, bool *is_const);
 int ReviseParentValue(struct TreeNode *curr_node, struct TreeNode *parent_node);
 
 struct Diff_elem_t *DiffOpCtor(DiffOp op);
 struct Diff_elem_t *DiffNumCtor(diff_num_t num);
-struct Diff_elem_t *DiffVarCtor(DiffVar var);
+struct Diff_elem_t *DiffVarCtor(char var);
 struct Diff_elem_t *DiffPsnArgCtor(void);
 
 struct TreeNode *ReadExpression(const char *str);
 struct TreeNode *GetAdd(const char **buf);
 struct TreeNode *GetMul(const char **buf);
-struct TreeNode *GetDgr(const char **buf);
+struct TreeNode *GetPow(const char **buf);
 struct TreeNode *GetUnarFunc(const char **buf);
 struct TreeNode *GetBrackets(const char **buf);
 struct TreeNode *GetArg(const char **buf);
 
+
+struct TreeNode *SimplifyExpression(struct TreeNode *curr_node);
 #endif //DIFF_H_INCLUDED

@@ -22,12 +22,19 @@ int main(void)
 
     struct Tree *diff_tree = TreeCtor();
     ERROR_CHECK(diff_tree == NULL, 3);
-    diff_tree->root = DifferentiateNode(tree->root);
+    diff_tree->root = DifferentiateNode(tree->root, 'y');
     int err_revise = ReviseParentValue(diff_tree->root, NULL);
     ERROR_CHECK(err_revise, 4);
 
     TREEDUMP(diff_tree, "differ");
         tree_deserial_err = TreeSerialize(diff_tree);
+    ERROR_CHECK(tree_deserial_err, 5);
+
+    diff_tree->root = SimplifyExpression(diff_tree->root);
+    ERROR_CHECK(diff_tree->root == NULL, 8);
+
+    TREEDUMP(diff_tree, "simplify");
+       tree_deserial_err = TreeSerialize(diff_tree);
     ERROR_CHECK(tree_deserial_err, 5);
 
     int tree_dtor_err = TreeDtor(tree);
