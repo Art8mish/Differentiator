@@ -103,6 +103,7 @@ enum TreeError
     ERROR_TREE_NODE_CTOR         = 20,
     ERROR_TREE_TIE               = 21,
     ERROR_CONVERT_STR_TO_NUM     = 22,
+    ERROR_SERIALIZE_NODE         = 23,
     
 };
 
@@ -166,7 +167,7 @@ int AddTreeGraphPng(int graph_counter);
 int CreateTreeNodes(const struct TreeNode *curr_node, FILE *graph_f);
 
 int TreeSerialize(const struct Tree *tree);
-int SerializeNode(const struct TreeNode *curr_node, FILE *tree_f);
+int SerializeNode(FILE *tree_f, const struct TreeNode *curr_node);
 
 struct Tree *TreeDeserialize(const char *input_file_name);
 int DeserializeNode(struct Tree *new_tree, struct TreeNode **parent_node, 

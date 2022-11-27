@@ -64,11 +64,19 @@ enum DiffError
     ERROR_FIND_VAR                = 6,
     ERROR_REVISE_PARENT_VALUE     = 7,
     ERROR_SIMPLIFY_EXPRESSION     = 8,
+    ERROR_DIFFERENTIATE_NODE      = 9,
+    ERROR_REVISE_PARENT_NODE      = 10,
+    ERROR_FRAME_VAR               = 11,
+    ERROR_STAT                    = 12,
 };
 
 const diff_num_t PI  = 3.1415926535;
 const diff_num_t EXP = 2.7182818284;
 const diff_num_t EPS = 1e-7;
+
+static const char *const      TEX_FILE_PATH = "io/metodichka.tex";
+static const char *const FOREWORD_FILE_PATH = "io/foreword.tex";
+
 
 #define COMPARE_DOUBLE(value, num)                               \
             ((value) - EPS <= (num) && (value) + EPS >= (num))
@@ -79,6 +87,7 @@ struct TreeNode *DiffNodeCtor(TypeDiffArg type_value,     struct Diff_elem_t *va
 struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var);
 
 int FindVar(struct TreeNode *curr_node, char diff_var, bool *is_const);
+int FrameVar(struct TreeNode *curr_node, char diff_var, diff_num_t value);
 int ReviseParentValue(struct TreeNode *curr_node, struct TreeNode *parent_node);
 
 struct Diff_elem_t *DiffOpCtor(DiffOp op);
@@ -94,6 +103,8 @@ struct TreeNode *GetUnarFunc(const char **buf);
 struct TreeNode *GetBrackets(const char **buf);
 struct TreeNode *GetArg(const char **buf);
 
-
+int CreateMatanManual(struct Tree *expr, char var, diff_num_t point, 
+                      unsigned int diff_dgr, unsigned int taylor_dgr);
+                      
 struct TreeNode *SimplifyExpression(struct TreeNode *curr_node);
 #endif //DIFF_H_INCLUDED

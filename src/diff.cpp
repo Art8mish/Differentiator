@@ -333,6 +333,35 @@ int FindVar(struct TreeNode *curr_node, char diff_var, bool *is_const)
     return SUCCESS;       
 }
 
+int FrameVar(struct TreeNode *curr_node, char diff_var, diff_num_t value)
+{
+    ERROR_CHECK(curr_node == NULL, ERROR_NULL_PTR); 
+
+    if (curr_node->value->type_arg == TYPE_VAR && 
+        curr_node->value->diff_arg->var == diff_var)
+    {
+        curr_node->value->diff_arg->var = PSN_VAR;
+        curr_node->value->diff_arg->num = value;
+        curr_node->value->type_arg = TYPE_NUM;
+
+        return SUCCESS;        
+    }
+
+    if (curr_node->left != NULL)
+    {
+        int find_var_err = FrameVar(curr_node->left, diff_var, value);
+        ERROR_CHECK(find_var_err, ERROR_FIND_VAR);
+    }
+
+    if (curr_node->right != NULL)
+    {
+        int find_var_err = FrameVar(curr_node->right, diff_var, value);
+        ERROR_CHECK(find_var_err, ERROR_FIND_VAR);
+    }
+
+    return SUCCESS;       
+}
+
 
 int ReviseParentValue(struct TreeNode *curr_node, struct TreeNode *parent_node)
 {
@@ -430,12 +459,12 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
 {
     ERROR_CHECK(curr_node == NULL, NULL);
 
-    printf("enter simplify\n");
+    struct TreeNode* prev_left = curr_node->left;
+    struct TreeNode* prev_right = curr_node->right;
 
     if (curr_node->value->type_arg == TYPE_NUM ||
         curr_node->value->type_arg == TYPE_VAR)
         return curr_node;
-
     
     struct TreeNode *left_node = NULL;
     if (curr_node->left != NULL)
@@ -594,8 +623,8 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
     }
 
     //(..) * 1 || (..) / 1 || (..) ^ 1 || (..) + 0 || (..) - 0 = (..)
-    if (left_node != NULL && right_node != NULL  &&
-        ((NODE_OP(curr_node) == MUL_OP  || 
+    if (left_node != NULL && right_node != NULL &&
+        (((NODE_OP(curr_node) == MUL_OP  || 
           NODE_OP(curr_node) == DIV_OP  ||
           NODE_OP(curr_node) == POW_OP)          &&
         (right_node->value->type_arg == TYPE_NUM &&
@@ -603,7 +632,7 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
         ((NODE_OP(curr_node) == ADD_OP  ||
           NODE_OP(curr_node) == SUB_OP)          &&
         (right_node->value->type_arg == TYPE_NUM &&
-         COMPARE_DOUBLE(NODE_NUM(right_node), 0))))
+         COMPARE_DOUBLE(NODE_NUM(right_node), 0)))))
     {
         struct TreeNode *new_node = NCOPY(curr_node->left);
         int node_dtor_err = TreeNodeDtor(curr_node);
@@ -613,12 +642,12 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
 
     // 1 * (..) || 0 + (..)  = (..)
     if (left_node != NULL && right_node != NULL &&
-        (NODE_OP(curr_node) == MUL_OP &&
+        ((NODE_OP(curr_node) == MUL_OP &&
         left_node->value->type_arg == TYPE_NUM &&
         COMPARE_DOUBLE(NODE_NUM(left_node), 1)) ||
         (NODE_OP(curr_node) == ADD_OP &&
         left_node->value->type_arg == TYPE_NUM &&
-        COMPARE_DOUBLE(NODE_NUM(left_node), 0)))
+        COMPARE_DOUBLE(NODE_NUM(left_node), 0))))
     {
         struct TreeNode *new_node = NCOPY(curr_node->right);
         int node_dtor_err = TreeNodeDtor(curr_node);
@@ -640,7 +669,10 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
         int tree_tie_err = TreeNodeTie(curr_node, right_node, TREE_TIE_RIGHT);
         ERROR_CHECK(tree_tie_err, NULL);
     }
-    
 
+    if (curr_node->left  != prev_left ||
+           curr_node->right != prev_right)
+        return SimplifyExpression(curr_node);
+    
     return curr_node;
 }

@@ -167,9 +167,6 @@ int CreateTreeNodes(const struct TreeNode *curr_node, FILE *graph_f)
     else
         fprintf(graph_f, "var = %c", curr_node->value->diff_arg->var);
 
-
-
-
     fprintf(graph_f, "|{<f2>left_yes 0x%d | <f1>rght_no 0x%d}}\"]\n",
                         (int)curr_node->left, (int)curr_node->right);
 

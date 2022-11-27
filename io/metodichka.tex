@@ -1,0 +1,57 @@
+\documentclass[a4paper]{article}
+\usepackage{amsmath}
+\usepackage[unicode, pdftex]{hyperref} % гиперссылки
+\usepackage[usenames]{color} %цвета
+\usepackage{mathtext}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+\usepackage{amsfonts}
+\usepackage{float} % для нормального расположения картинок и таблиц
+\usepackage[left=15mm, top=15mm, right=15mm, bottom=15mm, nohead, footskip=10mm]{geometry} % настройки полей документа
+\usepackage{graphicx} % работа с картинками 
+\usepackage{wrapfig}
+\usepackage{placeins} % работа с картинками (их корректная вставка в текст)
+\usepackage{misccorr} % в заголовках появляется точка, но при ссылке на них ее нет
+\usepackage{indentfirst} % красная строка у первой строки раздела
+\DeclareMathSymbol{,}{\mathord}{letters}{"3B} % убирает пробел после запятой в формулах
+
+\DeclareSymbolFont{lsymb}{U}{euex}{m}{n} % Определяем свой шрифт "lsumb"
+\DeclareMathSymbol{\intop}{\mathop}{lsymb}{"52}% Определяем интегралы
+\DeclareMathSymbol{\ointop}{\mathop}{lsymb}{"48}
+\DeclareMathSymbol{\smallint}{\mathop}{lsymb}{"52}
+
+\usepackage{mathrsfs}%Красивая ЭДС с завитушками
+\DeclareSymbolFont{rsfs}{U}{rsfs}{m}{n} \DeclareSymbolFontAlphabet{\mathscr}{rsfs}
+\DeclareMathSymbol{\EDS}{\mathord}{rsfs}{`E}
+\usepackage{amssymb} %русские неравенства: \leqslant \geqslant
+\usepackage[12pt]{extsizes} % для того чтобы задать нестандартный 14-ый размер шрифта
+
+\usepackage{setspace}
+\usepackage{cmap}					
+\usepackage{mathtext} 				
+\usepackage[T2A]{fontenc}			
+\usepackage[utf8]{inputenc}			
+\usepackage[english,russian]{babel}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\usepackage[rgb]{xcolor}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} 
+\usepackage{icomma} 
+\mathtoolsset{showonlyrefs=true}
+\usepackage{euscript}
+\usepackage{mathrsfs}
+
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+	{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\title{\textbf{Методичка по МатАНАЛизу}}
+\author{Шептяков Артём}
+\date{\today}

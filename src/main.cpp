@@ -3,13 +3,7 @@
 
 int main(void)
 {
-    /*printf("Hello\n");
-    const char *string = "262.2839";
-    double num = 0;
-    int err = ConvertStrToNum(string, &num);
-
-    printf("err = %d, num = %lf\n", err, num);
-    */
+    printf("Hello\n");
 
     printf("start\n");
     struct Tree *tree = TreeDeserialize(TREE_DESERIALIZATION_PATH);
@@ -22,7 +16,7 @@ int main(void)
 
     struct Tree *diff_tree = TreeCtor();
     ERROR_CHECK(diff_tree == NULL, 3);
-    diff_tree->root = DifferentiateNode(tree->root, 'y');
+    diff_tree->root = DifferentiateNode(tree->root, 'x');
     int err_revise = ReviseParentValue(diff_tree->root, NULL);
     ERROR_CHECK(err_revise, 4);
 
@@ -30,6 +24,9 @@ int main(void)
         tree_deserial_err = TreeSerialize(diff_tree);
     ERROR_CHECK(tree_deserial_err, 5);
 
+
+    int frame_var_err = FrameVar(diff_tree->root, 'x', 2);
+    ERROR_CHECK(frame_var_err, 9);
     diff_tree->root = SimplifyExpression(diff_tree->root);
     ERROR_CHECK(diff_tree->root == NULL, 8);
 

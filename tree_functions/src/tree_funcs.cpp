@@ -295,12 +295,12 @@ int TreeSerialize(const struct Tree *tree)
 {
     ERROR_CHECK(tree == NULL, ERROR_NULL_PTR);
 
-    FILE *tree_f = fopen(TREE_SERIALIZATION_PATH, "w");
+    FILE *tree_f = fopen(TREE_SERIALIZATION_PATH, "a");
     ERROR_CHECK(tree_f == NULL, ERROR_OPENING_FILE);
 
     if (tree->root != NULL)
     {
-        int save_node_err = SerializeNode(tree->root, tree_f);
+        int save_node_err = SerializeNode(tree_f, tree->root);
         FILE_ERROR_CHECK(save_node_err, ERROR_SAVE_NODE, tree_f);
     }
 
@@ -310,7 +310,7 @@ int TreeSerialize(const struct Tree *tree)
     return SUCCESS;
 }
 
-int SerializeNode(const struct TreeNode *curr_node, FILE *tree_f)
+int SerializeNode(FILE *tree_f, const struct TreeNode *curr_node)
 {
     ERROR_CHECK(curr_node == NULL, ERROR_NULL_PTR);
     ERROR_CHECK(tree_f    == NULL, ERROR_NULL_PTR);
@@ -321,7 +321,7 @@ int SerializeNode(const struct TreeNode *curr_node, FILE *tree_f)
             curr_node->left->left  != NULL)
             fprintf(tree_f, "(");
 
-        int save_node_err = SerializeNode(curr_node->left, tree_f);
+        int save_node_err = SerializeNode(tree_f, curr_node->left);
         ERROR_CHECK(save_node_err, ERROR_SAVE_NODE);
 
         if (curr_node->left->right != NULL && 
@@ -392,7 +392,7 @@ int SerializeNode(const struct TreeNode *curr_node, FILE *tree_f)
             curr_node->right->left  != NULL)
             fprintf(tree_f, "(");
 
-        int save_node_err = SerializeNode(curr_node->right, tree_f);
+        int save_node_err = SerializeNode(tree_f, curr_node->right);
         ERROR_CHECK(save_node_err, ERROR_SAVE_NODE);
 
         if (curr_node->right->right != NULL && 
