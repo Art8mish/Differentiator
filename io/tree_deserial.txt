@@ -1,5 +1,1 @@
-(x + 5) * (x^2 - 1)
-Variable: x
-Point: 2
-Degree of differentiation: 3
-Degree of Taylor series: 4
+ln(x + e + sin(x))

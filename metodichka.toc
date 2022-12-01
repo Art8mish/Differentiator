@@ -1,0 +1,96 @@
+\babel@toc {russian}{}\relax 
+\contentsline {section}{\numberline {1}Билет 1}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Предел последовательности точек в $n$–мерном евклидовом пространстве.}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Теорема Больцано–Вейерштрасса и критерий Коши сходимости последовательности.}{5}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Внутренние, предельные, изолированные точки множества.}{8}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Открытые и замкнутые множества, их свойства.}{8}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Внутренность, замыкание и граница множества.}{11}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Компакты.}{11}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}Метрическое пространство.}{11}{subsection.1.7}%
+\contentsline {subsection}{\numberline {1.8}Компакты в метрическом пространстве и описание компактов в $n$–мерном евклидовом пространстве.}{12}{subsection.1.8}%
+\contentsline {section}{\numberline {2}Билет 2}{14}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Предел числовой функции нескольких переменных.}{14}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Предел функции по множеству.}{15}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Непрерывность функции нескольких переменных в точке и по множеству.}{16}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Свойства функций, непрерывных на компакте: ограниченность, достижение точных нижней и верхней граней, равномерная непрерывность (теорема Кантора).}{17}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Теорема о промежуточных значениях функции, непрерывной в области.}{19}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Билет 3}{20}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Частные производные функции нескольких переменных.}{20}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Дифференцируемость функции в точке}{20}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Достаточные условия дифференцируемости функции в точке}{22}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Дифференцируемость сложной функции}{24}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Дифференциал. Инвариантность формы дифференциала отностительно замены переменных.}{25}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Производная по направлению и градиент, их связь и геомертический смысл.}{26}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Необходимые условия дифференцируемости}{27}{subsection.3.7}%
+\contentsline {section}{\numberline {4}Билет 4}{29}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Частные производные высших порядков.}{29}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Независимость смешанной частной производной от порядка дифференцирования.}{29}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Дифференциалы высших порядков. Отсутствие инвариантности их формы.}{31}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Формула Тейлора для функций нескольких переменных.}{32}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Билет 5}{33}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Необходимые определения и предложения билета.}{33}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Определение измеримости по Жордану множества в $m$-мерном евклидовом пространстве.}{37}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Критерий измеримости.}{38}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Примеры неизмеримых по Жордану множеств.}{39}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Измеримость объединения, пересечения и разности измеримых множеств.}{39}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Конечная аддитивность меры Жордана.}{39}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Измеримость и мера цилиндра в $(m+1)$-мерном пространстве.}{40}{subsection.5.7}%
+\contentsline {section}{\numberline {6}Билет 6}{41}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Определенный интеграл Римана.}{41}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Верхние и нижние суммы Дарбу, их свойства.}{42}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Критерий интегрируемости функции.}{43}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Классы интегрируемых функций.}{44}{subsection.6.4}%
+\contentsline {section}{\numberline {7}Билет 7}{46}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Некоторые свойства определенного интеграла.}{46}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Оценки определенного интеграла.}{47}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Интегралы с переменным верхним пределом. Вычисление определеннных интегралов.}{50}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Билет 8}{53}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Геометрические приложения определенного интеграла.}{53}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Вычисление площади поверхнности вращения.}{54}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Криволинейные интегралы.}{54}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Существование криволинейных интегралов, их вычисление.}{55}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}Несобственный интеграл.}{56}{subsection.8.5}%
+\contentsline {subsection}{\numberline {8.6}Несобственные интегралы от неотрицательных функций:}{57}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.7}Критерий Коши сходимости несобственных интегралов.}{58}{subsection.8.7}%
+\contentsline {subsection}{\numberline {8.8}Абсолютная и условная сходимость несобственных интегралов.}{58}{subsection.8.8}%
+\contentsline {subsection}{\numberline {8.9}Признаки Дирихле и Абеля сходимости интегралов.}{59}{subsection.8.9}%
+\contentsline {section}{\numberline {9}Билет 9}{61}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Числовые ряды.}{61}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Критерий Коши сходимости ряда.}{61}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Знакопостоянные ряды: признак сравнения сходимости, признаки Даламбера и Коши, интегральный признак.}{62}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Знакопеременные ряды, абсолютная и условная сходимость, признаки Лейбница, Дирихле и Абеля.}{67}{subsection.9.4}%
+\contentsline {subsection}{\numberline {9.5}Независимость суммы абсолютно сходящегося ряда от порядка слагаемых.}{70}{subsection.9.5}%
+\contentsline {subsection}{\numberline {9.6}Теорема Римана о перестановках членов условно сходящегося ряда.}{71}{subsection.9.6}%
+\contentsline {subsection}{\numberline {9.7}Произведение абсолютно сходящихся рядов.}{71}{subsection.9.7}%
+\contentsline {section}{\numberline {10}Билет 10}{72}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Понятия функциональных последовательностей и рядов.}{72}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Сходимость функциональных рядов и последовательностей в точке и на множестве.}{73}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Понятие равномерной сходимости на множестве.}{73}{subsection.10.3}%
+\contentsline {subsection}{\numberline {10.4}Критерий Коши равномерной сходимости.}{74}{subsection.10.4}%
+\contentsline {subsection}{\numberline {10.5}Критерии равномерной сходимости функциональной последовательности и функционального ряда.}{75}{subsection.10.5}%
+\contentsline {subsection}{\numberline {10.6}Свойства равномерно сходящихся последовательностей и рядов.}{77}{subsection.10.6}%
+\contentsline {subsection}{\numberline {10.7}Достаточные признаки сходимости функциональных рядов.}{79}{subsection.10.7}%
+\contentsline {section}{\numberline {11}Билет 11}{81}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Степенные ряды с комплексными числами}{81}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Теорема 1. [Первая теорема Абеля]}{81}{subsection.11.2}%
+\contentsline {subsection}{\numberline {11.3}Теорема 2. [О радиусе сходимости степенного ряда].}{82}{subsection.11.3}%
+\contentsline {subsection}{\numberline {11.4}Теорема 3. [Вторая теорема Абеля].}{83}{subsection.11.4}%
+\contentsline {subsection}{\numberline {11.5}Теорема 4.}{83}{subsection.11.5}%
+\contentsline {subsection}{\numberline {11.6}Теорема 5. [Формула Коши-Адамара].}{84}{subsection.11.6}%
+\contentsline {subsection}{\numberline {11.7}Теорема 6.}{84}{subsection.11.7}%
+\contentsline {section}{\numberline {12}Билет 12}{86}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Степенные ряды с действительными членами.}{86}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Бесконечная дифференцируемость суммы степенного ряда на интервале сходимости.}{86}{subsection.12.2}%
+\contentsline {subsection}{\numberline {12.3}Единственность представления функции степенным рядом.}{87}{subsection.12.3}%
+\contentsline {subsection}{\numberline {12.4}Достаточные условия разложимости бесконечно дифференцируемой функции в степенной ряд}{88}{subsection.12.4}%
+\contentsline {subsection}{\numberline {12.5}Ряд Тейлора}{88}{subsection.12.5}%
+\contentsline {subsection}{\numberline {12.6}Формула Тейлора с остаточным членом в интегральной форме.}{89}{subsection.12.6}%
+\contentsline {section}{\numberline {13}Билет 13}{90}{section.13}%
+\contentsline {subsection}{\numberline {13.1}Разложение в ряд Тейлора основных элементарных функций: $e^x$, $\cos x$, $\sin x$, $\ln (1 + x)$, $(1 + x)^{\alpha }$.}{90}{subsection.13.1}%
+\contentsline {subsection}{\numberline {13.2}Разложение в степенной ряд комплекснозначной функции $e^z$.}{92}{subsection.13.2}%
+\contentsline {section}{\numberline {14}Анализ функции}{95}{section.14}%
+\contentsline {subsection}{\numberline {14.1}Касательная к графику функции в точке}{95}{subsection.14.1}%
+\contentsline {subsection}{\numberline {14.2}Производная 2-ой степени}{95}{subsection.14.2}%
+\contentsline {subsection}{\numberline {14.3}Разложение по формуле Тейлора}{95}{subsection.14.3}%
+\contentsline {subsection}{\numberline {14.4}График функции}{96}{subsection.14.4}%
+\contentsline {section}{\numberline {15}Подсчет погрешности}{97}{section.15}%

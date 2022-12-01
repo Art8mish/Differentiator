@@ -15,11 +15,11 @@
 #define CREATE_TREE_NODE_VALUE(val, err)                                                             \
             do                                                                                          \
             {                                                                                           \
-                (val) = (struct DiffNode *) calloc(1, sizeof(struct DiffNode));                     \
+                val = (struct DiffNode *) calloc(1, sizeof(struct DiffNode));                     \
                 ERROR_CHECK((val) == NULL, err);                                                    \
-                (val)->type_arg = TYPE_PSN;                                                       \
-                (val)->diff_arg = DiffPsnArgCtor();                                               \
-                ERROR_CHECK((val)->diff_arg == NULL, err);                                        \
+                val->type_arg = TYPE_PSN;                                                       \
+                val->diff_arg = DiffPsnArgCtor();                                               \
+                ERROR_CHECK(val->diff_arg == NULL, err);                                        \
             } while (false)
 
 #define COPY_TREE_VAl(val, copying_val)                                   \
@@ -47,11 +47,15 @@
                 ERROR_CHECK(elem == NULL, error);                        \
             } while (false)          
 
-#define COMPARE_TREE_ELEM(frst_value, scnd_value)                        \
+#define COMPARE_TREE_ELEM(frst_value, scnd_value)                               \
             strcmp(frst_value, scnd_value) == 0
 
-#define TREEDUMP(tree, comment)                                           \
+#define TREEDUMP(tree, comment)                                                 \
             TreeDump(tree, comment, true, __FILE__, __LINE__, __FUNCTION__)
+
+#define NODEDUMP(node, comment)                                                 \
+            TreeNodeDump(node, comment, true, __FILE__, __LINE__, __FUNCTION__)
+
 
 #include "../../include/diff.h"
 typedef struct DiffNode *tree_elem_t;
@@ -104,6 +108,9 @@ enum TreeError
     ERROR_TREE_TIE               = 21,
     ERROR_CONVERT_STR_TO_NUM     = 22,
     ERROR_SERIALIZE_NODE         = 23,
+    ERROR_TREE_CTOR              = 24,
+    ERROR_TREE_NODE_COPY         = 25,
+    ERROR_TREE_DTOR              = 26,
     
 };
 
@@ -161,6 +168,9 @@ int TreeCheckError(struct Tree *tree);
 
 int TreeDump(const struct Tree *tree, const char *comment = NULL, bool debug = false,
              const char *file_name = NULL, int line_num = 0, const char *func_name = NULL);
+int TreeNodeDump(struct TreeNode *curr_node, const char *comment, bool debug,
+                 const char *file_name, int line_num, const char *func_name);
+
 int CreateTreeGraph(const struct Tree *tree);
 int SaveTreeGraphPng(void);
 int AddTreeGraphPng(int graph_counter);
@@ -173,8 +183,7 @@ struct Tree *TreeDeserialize(const char *input_file_name);
 int DeserializeNode(struct Tree *new_tree, struct TreeNode **parent_node, 
                     char **buf, int recur_level);
 
-//int ReadValue(tree_elem_t *pt_val, char **buf);
-int ConvertStrToNum(const char **string, double *num);
+size_t ConvertStrToNum(const char **string, double *num);
 
 
 #endif //TREE_H_INCLUDED

@@ -448,18 +448,20 @@ struct Diff_elem_t *DiffPsnArgCtor(void)
 
 #define SIMPLIFY_ITER(code)                                      \
             struct TreeNode *new_node = code;                    \
-            int node_dtor_err = TreeNodeDtor(curr_node);         \
-            ERROR_CHECK(node_dtor_err, NULL);                    \
+            int node_dtor_err = TreeNodeDtor(curr_node);           \
+            ERROR_CHECK(node_dtor_err, NULL);                       \
+            printf("new_node.type = %d, var = %d, num = %lf, op = %d\n",  \
+                    new_node->value->type_arg, new_node->value->diff_arg->var,\
+                    new_node->value->diff_arg->num, new_node->value->diff_arg->op);\
             return new_node
-
-
 
 
 struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
 {
     ERROR_CHECK(curr_node == NULL, NULL);
+    printf("entered simplify expression, curr_node: %d\n", curr_node);
 
-    struct TreeNode* prev_left = curr_node->left;
+    struct TreeNode* prev_left  = curr_node->left;
     struct TreeNode* prev_right = curr_node->right;
 
     if (curr_node->value->type_arg == TYPE_NUM ||
@@ -479,6 +481,11 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
         right_node = SimplifyExpression(curr_node->right);
         ERROR_CHECK(right_node == NULL, NULL);
     }
+
+    curr_node->left  = left_node;
+    curr_node->right = right_node;
+
+    printf("type_arg = %d, op = %d\n", curr_node->value->type_arg, curr_node->value->diff_arg->op);
     
     ERROR_CHECK(curr_node->value->type_arg != TYPE_OP, NULL);
 
@@ -543,7 +550,9 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
 
             case LN_OP  :  
                 {
+                    printf("ln-> right_node_num = %lf\n", log(NODE_NUM(right_node)));
                     SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(log(NODE_NUM(right_node))), NULL, NULL));
+                    printf("end ln\n");
                     break;
                 }
             default     :
@@ -655,9 +664,6 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
         return new_node;
     }
 
-    curr_node->left  = left_node;
-    curr_node->right = right_node;
-
     if (left_node != NULL)
     {
         int tree_tie_err = TreeNodeTie(curr_node, left_node, TREE_TIE_LEFT);
@@ -670,9 +676,11 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
         ERROR_CHECK(tree_tie_err, NULL);
     }
 
-    if (curr_node->left  != prev_left ||
-           curr_node->right != prev_right)
+    
+    if (left_node  != prev_left ||
+        right_node != prev_right)
         return SimplifyExpression(curr_node);
     
+    printf("do nothing\n");
     return curr_node;
 }

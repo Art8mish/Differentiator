@@ -52,6 +52,24 @@ int TreeDump(const struct Tree *tree, const char *comment, bool debug,
     return SUCCESS;
 }
 
+int TreeNodeDump(struct TreeNode *curr_node, const char *comment, bool debug,
+                 const char *file_name, int line_num, const char *func_name)
+{
+    ERROR_CHECK(curr_node == NULL, ERROR_NULL_PTR);
+
+    struct Tree *tree = TreeCtor();
+    ERROR_CHECK(tree == NULL, ERROR_TREE_CTOR);
+
+    tree->root = curr_node;
+    TreeDump(tree, comment, true, __FILE__, __LINE__, __FUNCTION__);
+    tree->root = NULL;
+
+    int dtor_err = TreeDtor(tree);
+    ERROR_CHECK(dtor_err, ERROR_TREE_DTOR);
+
+    return SUCCESS;
+}
+
 int CreateTreeGraph(const struct Tree *tree)
 {
     ERROR_CHECK(tree == NULL, ERROR_NULL_PTR);

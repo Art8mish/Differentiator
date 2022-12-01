@@ -16,22 +16,6 @@
                 if (cond)                           \
                     tree->error |= (err_code);      \
             } while(false) 
-
-#define SKIP_SPACE(buf)                                     \
-            while(isspace(*(buf)) || *(buf) == '\0')        \
-            {                                               \
-                (buf)++;                                    \
-                if (*(buf) == EOF)                          \
-                    return SUCCESS;                         \
-            }
-
-#define SKIP_SPACE_STR(buf)                                 \
-            while(isspace(*(buf)))                          \
-            {                                               \
-                (buf)++;                                    \
-                if (*(buf) == EOF)                          \
-                    return NULL;                            \
-            }
                         
 
 struct Tree *TreeCtor(void)
@@ -161,8 +145,8 @@ int TreeNodeTie(struct TreeNode *parent_node,
                 break;
             }
     
-        default:              return ERROR_WRONG_TREE_INSERT_PATH;
-                              break;
+        default:    return ERROR_WRONG_TREE_INSERT_PATH;
+                    break;
     }
 
     return SUCCESS;
@@ -304,6 +288,7 @@ int TreeSerialize(const struct Tree *tree)
         FILE_ERROR_CHECK(save_node_err, ERROR_SAVE_NODE, tree_f);
     }
 
+    fprintf(tree_f, "\n");
     int fclose_err = fclose(tree_f);
     ERROR_CHECK(fclose_err != 0, ERROR_CLOSING_FILE);
 
@@ -317,16 +302,10 @@ int SerializeNode(FILE *tree_f, const struct TreeNode *curr_node)
 
     if (curr_node->left != NULL)
     {
-        if (curr_node->left->right != NULL && 
-            curr_node->left->left  != NULL)
-            fprintf(tree_f, "(");
-
-        int save_node_err = SerializeNode(tree_f, curr_node->left);
-        ERROR_CHECK(save_node_err, ERROR_SAVE_NODE);
-
-        if (curr_node->left->right != NULL && 
-            curr_node->left->left  != NULL)
-            fprintf(tree_f, ")");
+        fprintf(tree_f, "(");
+        int serialize_node_err = SerializeNode(tree_f, curr_node->left);
+        ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE);
+        fprintf(tree_f, ")");
     }
 
     switch (curr_node->value->type_arg)
@@ -334,9 +313,9 @@ int SerializeNode(FILE *tree_f, const struct TreeNode *curr_node)
         case TYPE_PSN : fprintf(tree_f, " TYPE_PSN ");
                         break;
         case TYPE_NUM : if (COMPARE_DOUBLE(curr_node->value->diff_arg->num, EXP))
-                            fprintf(tree_f, "e");
+                            fprintf(tree_f, "%g", EXP);
                         else if (COMPARE_DOUBLE(curr_node->value->diff_arg->num, PI))
-                            fprintf(tree_f, "pi");
+                            fprintf(tree_f, "%g", PI);
                         else
                             fprintf(tree_f, "%g", curr_node->value->diff_arg->num);
                         break;
@@ -352,27 +331,27 @@ int SerializeNode(FILE *tree_f, const struct TreeNode *curr_node)
                                     break;
                     case DIV_OP  :  fprintf(tree_f, " / ");
                                     break;
-                    case POW_OP  :  fprintf(tree_f, " ^ ");
+                    case POW_OP  :  fprintf(tree_f, " ** ");
                                     break;
                     case SIN_OP  :  fprintf(tree_f, "sin ");
                                     break;
                     case COS_OP  :  fprintf(tree_f, "cos ");
                                     break;
-                    case TAN_OP  :  fprintf(tree_f, "tg ");
+                    case TAN_OP  :  fprintf(tree_f, "tan ");
                                     break;
-                    case ASIN_OP :  fprintf(tree_f, "arcsin ");
+                    case ASIN_OP :  fprintf(tree_f, "asin ");
                                     break;
-                    case ACOS_OP :  fprintf(tree_f, "arccos ");
+                    case ACOS_OP :  fprintf(tree_f, "acos ");
                                     break;
-                    case ATAN_OP :  fprintf(tree_f, "arctg ");
+                    case ATAN_OP :  fprintf(tree_f, "atan ");
                                     break;
-                    case SINH_OP :  fprintf(tree_f, "sh ");
+                    case SINH_OP :  fprintf(tree_f, "sinh ");
                                     break;
-                    case COSH_OP :  fprintf(tree_f, "ch ");
+                    case COSH_OP :  fprintf(tree_f, "cosh ");
                                     break;
-                    case TANH_OP :  fprintf(tree_f, "th ");
+                    case TANH_OP :  fprintf(tree_f, "tanh ");
                                     break;
-                    case LN_OP   :  fprintf(tree_f, "ln ");
+                    case LN_OP   :  fprintf(tree_f, "log ");
                                     break;
                     default:        fprintf(tree_f, "ERROR_OP");
                                     break;
@@ -388,16 +367,10 @@ int SerializeNode(FILE *tree_f, const struct TreeNode *curr_node)
 
     if (curr_node->right != NULL)
     {
-        if (curr_node->right->right != NULL && 
-            curr_node->right->left  != NULL)
-            fprintf(tree_f, "(");
-
-        int save_node_err = SerializeNode(tree_f, curr_node->right);
-        ERROR_CHECK(save_node_err, ERROR_SAVE_NODE);
-
-        if (curr_node->right->right != NULL && 
-            curr_node->right->left  != NULL)
-            fprintf(tree_f, ")");
+        fprintf(tree_f, "(");
+        int serialize_node_err = SerializeNode(tree_f, curr_node->right);
+        ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE);
+        fprintf(tree_f, ")");
     }
 
     return SUCCESS;
@@ -414,6 +387,10 @@ struct Tree *TreeDeserialize(const char *input_file_name)
     ERROR_CHECK(onegin_context == NULL, NULL);
 
     char *buf = onegin_context->chars_buffer;
+
+    /*
+    struct DiffLexicalElem *lex_structs = LexicalAnalisis(buf);
+    ERROR_CHECK(lex_structs == NULL, NULL);*/
    
     printf("buf = %s\n", buf);
     new_tree->root = ReadExpression(buf);
@@ -422,101 +399,162 @@ struct Tree *TreeDeserialize(const char *input_file_name)
     return new_tree;    
 }
 /*
-int DeserializeNode(struct Tree *new_tree, struct TreeNode **parent_node, 
-                    char **buf, int recur_level)
+struct DiffLexicalElem *LexicalAnalisis(char *buf)
 {
-    ERROR_CHECK( new_tree    == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK( parent_node == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK( buf == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK(*buf == NULL, ERROR_NULL_PTR);
+    ERROR_CHECK(buf == NULL, NULL);
+
+    unsigned int buf_pos = 0;
+
+    struct DiffLexicalElem *lex_structs = (struct DiffLexicalElem *) 
+                                            calloc(MAX_FORMULA_LENGTH, sizeof(struct DiffLexicalElem));
+    ERROR_CHECK(lex_structs == NULL, NULL);
+
+    int index = 0;
+    bool is_oper_now = false;
+    while (*buf != '\0')
+    {
+        if (*buf == '+' && !is_oper_now) 
+        {
+            is_oper_now = true;
+            lex_structs[index].type_arg = TYPE_OP;
+            lex_structs[index].arg.op   = ADD_OP;
+
+            buf++;
+            buf_pos++;
+        }
+
+        else if (*buf == '-' && !is_oper_now) 
+        {
+            is_oper_now = true;
+            lex_structs[index].type_arg = TYPE_OP;
+            lex_structs[index].arg.op   = SUB_OP;
+
+            buf++;
+            buf_pos++;
+        }
+
+        else if (*buf == '*' && !is_oper_now) 
+        {
+            LEX_ERROR(is_oper_now, NULL, buf_pos);
+            is_oper_now = true;
+            lex_structs[index].type_arg = TYPE_OP;
+            lex_structs[index].arg.op   = MUL_OP;
+
+            buf++;
+            buf_pos++;
+        }
+
+        else if (*buf == '/' && !is_oper_now) 
+        {
+            LEX_ERROR(is_oper_now, NULL, buf_pos);
+            is_oper_now = true;
+            lex_structs[index].type_arg = TYPE_OP;
+            lex_structs[index].arg.op   = DIV_OP;
+
+            buf++;
+            buf_pos++;
+        }
+
+        else if (*buf == '^' && !is_oper_now) 
+        {
+            LEX_ERROR(is_oper_now, NULL, buf_pos);
+            is_oper_now = true;
+            lex_structs[index].type_arg = TYPE_OP;
+            lex_structs[index].arg.op   = POW_OP;
+
+            buf++;
+            buf_pos++;
+        }
+
+        else
+        {
+            size_t arg_len = GetLexicArg(&buf, &lex_structs[index]);
+            LEX_ERROR(arg_len == 0, NULL, buf_pos);
+            buf_pos += arg_len;
+            is_oper_now = false;
+        }
+            
+        index++;
+    }
+
+    return lex_structs; 
+}
+
+size_t GetLexicArg(const char **buf, struct DiffLexicalElem *lex_struct)
+{
+    printf("enter getarg\n");
+    printf("buf = %s\n", *buf);
+
+    size_t arg_len = 0;
+    const char *s_old = *buf;
+
+    if ((**buf >= '0' && **buf <= '9') || **buf == 'p' || **buf == 'e')
+    {
+        printf("enter num\n");
+        lex_struct->type_arg = TYPE_NUM;
+        diff_num_t num = DIFF_NUM_PSN;
+
+        if (**buf == 'p')
+        {
+            (*buf)++;
+            arg_len++;
+            ERROR_CHECK(**buf != 'i', 0);
+            num = PI;
+            (*buf)++;
+            arg_len++;
+        }
+
+        else if (**buf == 'e')
+        {
+            num = EXP;
+            (*buf)++;
+            arg_len++;
+        }
+
+        else
+        {
+            size_t num_length = ConvertStrToNum(buf, &num);
+            ERROR_CHECK(num_length == 0, 0);
+            arg_len += num_length;
+        }
+
+        printf("num = %lf\n", num);
+        lex_struct->arg.num = num;
+    }
     
-    tree_elem_t *pt_val = NULL;
-
-    SKIP_SPACE(*buf);
-    if ((**buf) == ')')
+    else if (**buf >= 'a' && **buf <= 'z' && 
+             **buf != 's' && **buf != 'c' && **buf != 't' &&
+             **buf != 'a' && **buf != 'l' && **buf != 'p' &&
+             **buf != 'e')
     {
+        printf("enter var\n");
+        lex_struct->type_arg = TYPE_VAR;
+
+        lex_struct->arg.var = **buf;
+
         (*buf)++;
-        return SUCCESS;
+        arg_len++;
     }
 
-    struct Diff_elem_t *main_value = DiffPsnArgCtor();
-    ERROR_CHECK(main_value, ERROR_DIFF_PSN_ARG_CTOR);
+    ERROR_CHECK(*buf == s_old, 0);
 
-    struct TreeNode *main_node = DiffNodeCtor(TYPE_OP, main_value, NULL, NULL);
-    ERROR_CHECK(main_node == NULL, ERROR_DIFF_NODE_CTOR);
-
-    if ((**buf) == '(')
-    {
-        (*buf)++;
-        int read_node_err = DeserializeNode(new_tree, &main_node->left, buf, ++recur_level);
-        ERROR_CHECK(read_node_err, ERROR_READ_NODE);
-    }
-
-    //main part
-    //read left arg
-    int read_val_err = ReadValue(pt_val, buf);
-    ERROR_CHECK(read_val_err, ERROR_READ_VALUE);
-
-    if ((*pt_val)->type_arg == TYPE_OP)
-        return ERROR_SYNTAX;//should be changed when doing solo argument funcs
-
-    struct TreeNode *left_node = TreeNodeCtor((*pt_val), NULL, NULL);
-    ERROR_CHECK(left_node == NULL, ERROR_TREE_NODE_CTOR);
-
-    main_node->left = left_node;
-
-    //insert check right argument for solo arg funcs (sin cos)
-
-    //read op
-    SKIP_SPACE(*buf)
-        read_val_err = ReadValue(pt_val, buf);
-    ERROR_CHECK(read_val_err, ERROR_READ_VALUE);
-
-    if ((*pt_val)->type_arg != TYPE_OP)
-        return ERROR_SYNTAX;
-
-    main_node->value = *pt_val;
-
-    //read right arg
-    SKIP_SPACE(*buf)
-    if ((**buf) == '(')
-    {
-        (*buf)++;
-        int read_node_err = DeserializeNode(new_tree, &main_node->right, buf, ++recur_level);
-        ERROR_CHECK(read_node_err, ERROR_READ_NODE);
-    }
-
-    else if ((**buf) == EOF)
-        return ERROR_SYNTAX;
-
-    read_val_err = ReadValue(pt_val, buf);
-    ERROR_CHECK(read_val_err, ERROR_READ_VALUE);
-
-    if ((*pt_val)->type_arg == TYPE_OP)
-        return ERROR_SYNTAX;//should be changed when doing solo argument funcs
-
-    struct TreeNode *right_node = TreeNodeCtor((*pt_val), NULL, NULL);
-    ERROR_CHECK(right_node == NULL, ERROR_TREE_NODE_CTOR);
-
-    main_node->right = right_node;
-
-    return SUCCESS;
+    return arg_len;
 }*/
 
 
-
-
-int ConvertStrToNum(const char **string, double *num)
+size_t ConvertStrToNum(const char **string, double *num)
 {
-    ERROR_CHECK(string == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK(   num == NULL, ERROR_NULL_PTR);
+    ERROR_CHECK(string == NULL, 0);
+    ERROR_CHECK(   num == NULL, 0);
 
+    size_t num_length = 0;
     int sign = 1;
     if(**string == '-' || **string == '+')
     {
         if (**string == '-')
             sign = -1;
         (*string)++;
+        num_length++;
     }
 
     *num = 0;
@@ -524,48 +562,48 @@ int ConvertStrToNum(const char **string, double *num)
     {
         *num = (*num) * 10 + **string - '0';
         (*string)++;
+        num_length++;
     }
 
     if (**string == '.' || **string == ',')
     {
         (*string)++;
+        num_length++;
         double degree = 0.1;
         while (**string >= '0' && **string <= '9')
         {
             *num += (**string - '0') * degree;
             (*string)++;
+            num_length++;
             degree *= 0.1;
         }
     }
     
     *num *= sign;
 
-    return SUCCESS;
+    return num_length;
 }
-
-
 
 
 struct TreeNode *ReadExpression(const char *str)
 {
     ERROR_CHECK(str == NULL, 0);
-    printf("enter readexp\n");
+    printf("Enter get exp\n");
     printf("buf = %s\n", str);
 
     struct TreeNode *node = GetAdd(&str);
     ERROR_CHECK(*str != '\0', NULL);
 
-
-    printf("finish reading expression\n");
     ERROR_CHECK(node == NULL, NULL);
     return node;
 }
 
 struct TreeNode *GetAdd(const char **buf)
 {
-    SKIP_SPACE_STR(*buf);
-    printf("enter add\n");
+    printf("Enter get add\n");
     printf("buf = %s\n", *buf);
+
+    SKIP_SPACE_STR(*buf);
 
     struct TreeNode *node = GetMul(buf);
 
@@ -593,9 +631,10 @@ struct TreeNode *GetAdd(const char **buf)
 
 struct TreeNode *GetMul(const char **buf)
 {
-    SKIP_SPACE_STR(*buf);
-    printf("enter mul\n");
+    printf("Enter get mul\n");
     printf("buf = %s\n", *buf);
+
+    SKIP_SPACE_STR(*buf);
 
     struct TreeNode *node = GetPow(buf);
 
@@ -628,9 +667,10 @@ struct TreeNode *GetMul(const char **buf)
 
 struct TreeNode *GetPow(const char **buf)
 {
-    SKIP_SPACE_STR(*buf);
-    printf("enter dgr\n");
+    printf("Enter get pow\n");
     printf("buf = %s\n", *buf);
+
+    SKIP_SPACE_STR(*buf);
 
     struct TreeNode *node = GetUnarFunc(buf);
 
@@ -651,19 +691,18 @@ struct TreeNode *GetPow(const char **buf)
 
 struct TreeNode *GetUnarFunc(const char **buf)
 {
-    SKIP_SPACE_STR(*buf);
-    printf("enter unar\n");
+    printf("Enter get unar\n");
     printf("buf = %s\n", *buf);
+
+    SKIP_SPACE_STR(*buf);
 
     struct TreeNode *node = NULL;
 
     if (**buf == 's' || **buf == 'c' || **buf == 't' || **buf == 'a' || **buf == 'l')
     {
-        printf("enter unar op\n");
         int symb_count = 0;
         char op[MAX_ARG_LEN] = { 0 };
-        sscanf((*buf), "%[a-z] %n", op, &symb_count);
-        printf("op = %s\n", op);                       
+        sscanf((*buf), "%[a-z] %n", op, &symb_count);                     
         (*buf) += symb_count;
 
         struct TreeNode *node2 = GetBrackets(buf);
@@ -714,9 +753,10 @@ struct TreeNode *GetUnarFunc(const char **buf)
 
 struct TreeNode *GetBrackets(const char **buf)
 {
-    SKIP_SPACE_STR(*buf);
-    printf("enter brackets\n");
+    printf("Enter get brackets\n");
     printf("buf = %s\n", *buf);
+
+    SKIP_SPACE_STR(*buf);
 
     struct TreeNode *node = NULL;
 
@@ -741,9 +781,10 @@ struct TreeNode *GetBrackets(const char **buf)
 
 struct TreeNode *GetArg(const char **buf)
 {
-    SKIP_SPACE_STR(*buf);
-    printf("enter getarg\n");
+    printf("Enter get arg\n");
     printf("buf = %s\n", *buf);
+
+    SKIP_SPACE_STR(*buf);
 
     tree_elem_t val = NULL;
     CREATE_TREE_NODE_VALUE(val, NULL);
@@ -752,7 +793,6 @@ struct TreeNode *GetArg(const char **buf)
     const char *s_old = *buf;
     if ((**buf >= '0' && **buf <= '9') || **buf == 'p' || **buf == 'e')
     {
-        printf("enter num\n");
         new_node->value->type_arg = TYPE_NUM;
         diff_num_t num = DIFF_NUM_PSN;
 
@@ -772,11 +812,10 @@ struct TreeNode *GetArg(const char **buf)
 
         else
         {
-            int cnvrt_str_to_num_err = ConvertStrToNum(buf, &num);
-            ERROR_CHECK(cnvrt_str_to_num_err, TREE_VAL_PSN);
+            size_t num_length = ConvertStrToNum(buf, &num);
+            ERROR_CHECK(num_length == 0, TREE_VAL_PSN);
         }
 
-        printf("num = %lf\n", num);
         new_node->value->diff_arg->num = num;
     }
     
@@ -785,7 +824,6 @@ struct TreeNode *GetArg(const char **buf)
              **buf != 'a' && **buf != 'l' && **buf != 'p' &&
              **buf != 'e')
     {
-        printf("enter var\n");
         new_node->value->type_arg = TYPE_VAR;
 
         new_node->value->diff_arg->var = **buf;
@@ -796,72 +834,7 @@ struct TreeNode *GetArg(const char **buf)
     ERROR_CHECK(*buf == s_old, TREE_VAL_PSN);
 
     SKIP_SPACE_STR(*buf);
-    printf("buf = %s\n", *buf);
 
     ERROR_CHECK(new_node == NULL, NULL);
     return new_node;
 }
-/*
-int ReadValue(char **buf, tree_elem_t *pt_val)
-{
-    ERROR_CHECK( buf  == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK(*buf  == NULL, ERROR_NULL_PTR);
-
-    char *value = (char *) calloc(MAX_ARG_LEN, sizeof(char));
-    int symb_count = 0;
-
-    CREATE_TREE_NODE_VALUE(pt_val, ERROR_CALLOC);
-
-    SKIP_SPACE((*buf));
-    //(*buf)++;
-
-    //while(**buf >= '0' || **buf <= '9')
-    sscanf((*buf), READABLE_SYMB "%n", value,  &symb_count);
-    (*buf) += symb_count;
-
-    //num
-    if(isdigit(value[0]))
-    {
-        (*pt_val)->type_arg = TYPE_NUM;
-        int convert_num_err = ConvertStrToNum((const char **)&value, &(*pt_val)->diff_arg->num);
-        ERROR_CHECK(convert_num_err, ERROR_CONVERT_STR_TO_NUM);
-    }
-
-    //var
-    if(isalpha(value[0]) && value[1] == '\0')
-    {
-        (*pt_val)->type_arg = TYPE_VAR;
-        if (value[0] == MAIN_VARIABLE)
-            (*pt_val)->diff_arg->var = X_VAR;
-
-        else
-            (*pt_val)->diff_arg->var = CONST_VAR;
-    }
-
-    //operation
-    else
-    {
-        int diff_op = PSN_OP;
-        (*pt_val)->type_arg = TYPE_OP;
-        if (value[0] == '+')
-            diff_op = ADD_OP;
-        if (value[0] == '-')
-            diff_op = SUB_OP;
-        if (value[0] == '*')
-            diff_op = MUL_OP;
-        if (value[0] == '/')
-            diff_op = DIV_OP;
-        if (value[0] == '^')
-            diff_op = EXP_OP;
-        if (strncmp(value, "sin", 3) == 0)
-            diff_op = SIN_OP;
-        if (strncmp(value, "cos", 3) == 0)
-            diff_op = COS_OP;
-
-    }
-
-    if(value[0] == '-' || value[0] == '+')
-
-    free(value);
-    return SUCCESS;
-}*/
