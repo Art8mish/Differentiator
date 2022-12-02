@@ -3,9 +3,6 @@
 
 int main(void)
 {
-    printf("Hello\n");
-
-    printf("start\n");
     struct Tree *tree = TreeDeserialize(TREE_DESERIALIZATION_PATH);
     ERROR_CHECK(tree == NULL, 1);
 
@@ -37,63 +34,9 @@ int main(void)
     int tree_dtor_err = TreeDtor(tree);
     ERROR_CHECK(tree_dtor_err, 1);
 
-    system("pdflatex io/metodichka.tex");
+    system("pdflatex io/metodichka.tex > patch");
 
     printf("SUCCEFULLY FINISHED\n");
     return SUCCESS;
 }
 
-int GetStartValues(double *point, int *diff_dgr, int *taylor_dgr)
-{
-    ERROR_CHECK(point      == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK(diff_dgr   == NULL, ERROR_NULL_PTR);
-    ERROR_CHECK(taylor_dgr == NULL, ERROR_NULL_PTR);
-
-    printf("Enter x value: ");
-                                                                   
-    bool correct_input = false;                                          
-    while (!correct_input)                                               
-    {                                                                    
-        int scanf_ret = scanf(" %lf", point); 
-        if (scanf_ret)                                   
-            correct_input = true;                                        
-        int ch = 0;                                                      
-        while ((ch = getchar()) != '\n')                                 
-            if (!isspace(ch))                                            
-                correct_input = false;                                   
-        if (!correct_input)                                              
-            printf("I do not understand.\nEnter correct value..\n");   
-    }    
-
-    printf("Enter differentiation degree: ");   
-    correct_input = false;
-    while (!correct_input)                                               
-    {                                                                    
-        int scanf_ret = scanf(" %d", diff_dgr); 
-        if (scanf_ret && *diff_dgr >= 0)                                  
-            correct_input = true;                                        
-        int ch = 0;                                                      
-        while ((ch = getchar()) != '\n')                                 
-            if (!isspace(ch))                                            
-                correct_input = false;                                   
-        if (!correct_input)                                              
-            printf("I do not understand.\nEnter correct value..\n");   
-    } 
-
-    printf("Enter maximum Taylor degree: ");
-    correct_input = false;   
-    while (!correct_input)                                               
-    {                                                                    
-        int scanf_ret = scanf(" %d", taylor_dgr); 
-        if (scanf_ret && *taylor_dgr >= 0)                                
-            correct_input = true;                                        
-        int ch = 0;                                                      
-        while ((ch = getchar()) != '\n')                                 
-            if (!isspace(ch))                                            
-                correct_input = false;                                   
-        if (!correct_input)                                              
-            printf("I do not understand.\nEnter correct value..\n");   
-    } 
-
-    return SUCCESS;
-}

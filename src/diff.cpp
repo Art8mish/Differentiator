@@ -1,24 +1,8 @@
 
 #include "../include/diff.h"
 
-#define OP(op)                \
-            DiffOpCtor(op)
-
-#define NUM(num)              \
-            DiffNumCtor(num)
-
-#define VAR(var)              \
-            DiffVarCtor(var)
-
-#define NCTOR(type_value, value, left_node, right_node)                    \
-            DiffNodeCtor(type_value, value, left_node, right_node)
-
 #define DIFFN(curr_node)                                                   \
             DifferentiateNode(curr_node, var)
-
-            
-#define NCOPY(curr_node)                                                   \
-            TreeNodeCopy(curr_node)
 
 
 struct TreeNode *DiffNodeCtor(TypeDiffArg type_value,     struct Diff_elem_t *value, 
@@ -78,28 +62,28 @@ struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var)
                 case ADD_OP : 
                     {   
                         return NCTOR(TYPE_OP, OP(ADD_OP),
-                                    DIFFN(curr_node->left),
-                                    DIFFN(curr_node->right));
+                                     DIFFN(curr_node->left),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case SUB_OP : 
                     {
                         return NCTOR(TYPE_OP, OP(SUB_OP),
-                                    DIFFN(curr_node->left),
-                                    DIFFN(curr_node->right));
+                                     DIFFN(curr_node->left),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case MUL_OP : 
                     {
                         return NCTOR(TYPE_OP, OP(ADD_OP), 
-                                    NCTOR(TYPE_OP, OP(MUL_OP),
-                                            DIFFN(curr_node->left), 
-                                            NCOPY(curr_node->right)), 
-                                    NCTOR(TYPE_OP, OP(MUL_OP),
-                                            NCOPY(curr_node->left), 
-                                            DIFFN(curr_node->right)));
+                                     NCTOR(TYPE_OP, OP(MUL_OP),
+                                           DIFFN(curr_node->left), 
+                                           NCOPY(curr_node->right)), 
+                                     NCTOR(TYPE_OP, OP(MUL_OP),
+                                           NCOPY(curr_node->left), 
+                                           DIFFN(curr_node->right)));
                         break;
                     }
 
@@ -107,16 +91,16 @@ struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var)
                     {
                         return NCTOR(TYPE_OP, OP(DIV_OP), 
                                     NCTOR(TYPE_OP, OP(SUB_OP),
-                                            NCTOR(TYPE_OP, OP(MUL_OP),
+                                          NCTOR(TYPE_OP, OP(MUL_OP),
                                                 DIFFN(curr_node->left), 
                                                 NCOPY(curr_node->right)), 
-                                            NCTOR(TYPE_OP, OP(MUL_OP),
+                                          NCTOR(TYPE_OP, OP(MUL_OP),
                                                 NCOPY(curr_node->left), 
                                                 DIFFN(curr_node->right))),
 
                                     NCTOR(TYPE_OP, OP(POW_OP),
-                                            NCOPY(curr_node->right), 
-                                            NCTOR(TYPE_NUM, NUM(2), NULL, NULL)));
+                                          NCOPY(curr_node->right), 
+                                          NCTOR(TYPE_NUM, NUM(2), NULL, NULL)));
                         break;
                     }
                     
@@ -134,151 +118,159 @@ struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var)
                             return  DIFFN(NCTOR(TYPE_OP, OP(POW_OP),
                                                 NCTOR(TYPE_NUM, NUM(EXP), NULL, NULL),
                                                 NCTOR(TYPE_OP, OP(MUL_OP),
-                                                    NCTOR(TYPE_OP, OP(LN_OP),
-                                                        NULL, NCOPY(curr_node->left)),
-                                                    NCOPY(curr_node->right))));
+                                                      NCTOR(TYPE_OP, OP(LN_OP),
+                                                            NULL, 
+                                                            NCOPY(curr_node->left)),
+                                                      NCOPY(curr_node->right))));
 
                         else if (left_is_const && right_is_const)
                             return  NCTOR(TYPE_NUM, NUM(0), NULL, NULL);
 
                         else if (left_is_const)
                             return NCTOR(TYPE_OP, OP(MUL_OP),
-                                        NCTOR(TYPE_OP, OP(MUL_OP),
-                                            NCOPY(curr_node),
-                                            NCTOR(TYPE_OP, OP(LN_OP),
-                                                NULL, NCOPY(curr_node->left))),
-                                        DIFFN(curr_node->right));
+                                         NCTOR(TYPE_OP, OP(MUL_OP),
+                                               NCOPY(curr_node),
+                                               NCTOR(TYPE_OP, OP(LN_OP),
+                                                     NULL, 
+                                                     NCOPY(curr_node->left))),
+                                         DIFFN(curr_node->right));
                         
                         else 
                             return NCTOR(TYPE_OP, OP(MUL_OP),
-                                        NCTOR(TYPE_OP, OP(MUL_OP),
-                                            NCOPY(curr_node->right),
-                                            NCTOR(TYPE_OP, OP(POW_OP),
-                                                NCOPY(curr_node->left), 
-                                                NCTOR(TYPE_OP, OP(SUB_OP),
-                                                    NCOPY(curr_node->right),
-                                                    NCTOR(TYPE_NUM, NUM(1), NULL, NULL)))),
-                                        DIFFN(curr_node->left));
+                                         NCTOR(TYPE_OP, OP(MUL_OP),
+                                               NCOPY(curr_node->right),
+                                               NCTOR(TYPE_OP, OP(POW_OP),
+                                                     NCOPY(curr_node->left), 
+                                                     NCTOR(TYPE_OP, OP(SUB_OP),
+                                                           NCOPY(curr_node->right),
+                                                           NCTOR(TYPE_NUM, NUM(1), NULL, NULL)))),
+                                         DIFFN(curr_node->left));
                         break;
                     }
 
                 case SIN_OP : 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(COS_OP),
-                                        NULL, NCOPY(curr_node->right)),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(COS_OP),
+                                           NULL, 
+                                           NCOPY(curr_node->right)),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case COS_OP : 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(MUL_OP),
-                                        NCTOR(TYPE_NUM, NUM(-1), NULL, NULL),
-                                        NCTOR(TYPE_OP, OP(SIN_OP),
-                                            NULL, NCOPY(curr_node->right))),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(MUL_OP),
+                                           NCTOR(TYPE_NUM, NUM(-1), NULL, NULL),
+                                           NCTOR(TYPE_OP, OP(SIN_OP),
+                                                 NULL, 
+                                                 NCOPY(curr_node->right))),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case TAN_OP  : 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(DIV_OP),
-                                        NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                        NCTOR(TYPE_OP, OP(POW_OP),
-                                                NCTOR(TYPE_OP, OP(COS_OP),
-                                                    NULL, NCOPY(curr_node->right)),
-                                                NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(DIV_OP),
+                                           NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                           NCTOR(TYPE_OP, OP(POW_OP),
+                                                 NCTOR(TYPE_OP, OP(COS_OP),
+                                                       NULL, 
+                                                       NCOPY(curr_node->right)),
+                                                 NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case ASIN_OP: 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(DIV_OP),
-                                        NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                        NCTOR(TYPE_OP, OP(POW_OP),
-                                                NCTOR(TYPE_OP, OP(SUB_OP),
-                                                    NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                                    NCTOR(TYPE_OP, OP(POW_OP),
-                                                        NCOPY(curr_node->right),
-                                                        NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
-                                                NCTOR(TYPE_NUM, NUM(0.5), NULL, NULL))),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(DIV_OP),
+                                           NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                           NCTOR(TYPE_OP, OP(POW_OP),
+                                                 NCTOR(TYPE_OP, OP(SUB_OP),
+                                                       NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                                       NCTOR(TYPE_OP, OP(POW_OP),
+                                                             NCOPY(curr_node->right),
+                                                             NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
+                                                 NCTOR(TYPE_NUM, NUM(0.5), NULL, NULL))),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case ACOS_OP: 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(DIV_OP),
-                                        NCTOR(TYPE_NUM, NUM(-1), NULL, NULL),
-                                        NCTOR(TYPE_OP, OP(POW_OP),
-                                                NCTOR(TYPE_OP, OP(SUB_OP),
-                                                    NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                                    NCTOR(TYPE_OP, OP(POW_OP),
-                                                        NCOPY(curr_node->right),
-                                                        NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
-                                                NCTOR(TYPE_NUM, NUM(0.5), NULL, NULL))),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(DIV_OP),
+                                           NCTOR(TYPE_NUM, NUM(-1), NULL, NULL),
+                                           NCTOR(TYPE_OP, OP(POW_OP),
+                                                 NCTOR(TYPE_OP, OP(SUB_OP),
+                                                       NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                                       NCTOR(TYPE_OP, OP(POW_OP),
+                                                             NCOPY(curr_node->right),
+                                                             NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
+                                                 NCTOR(TYPE_NUM, NUM(0.5), NULL, NULL))),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case ATAN_OP : 
                     {   
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(DIV_OP),
-                                        NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                        NCTOR(TYPE_OP, OP(ADD_OP),
-                                            NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                            NCTOR(TYPE_OP, OP(POW_OP),
-                                                NCOPY(curr_node->right),
-                                                NCTOR(TYPE_NUM, NUM(2), NULL, NULL)))),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(DIV_OP),
+                                           NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                           NCTOR(TYPE_OP, OP(ADD_OP),
+                                                 NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                                 NCTOR(TYPE_OP, OP(POW_OP),
+                                                       NCOPY(curr_node->right),
+                                                       NCTOR(TYPE_NUM, NUM(2), NULL, NULL)))),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case SINH_OP : 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(COSH_OP),
-                                        NULL, NCOPY(curr_node->right)),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(COSH_OP),
+                                           NULL, 
+                                           NCOPY(curr_node->right)),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case COSH_OP : 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(SINH_OP),
-                                        NULL, NCOPY(curr_node->right)),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(SINH_OP),
+                                           NULL, 
+                                           NCOPY(curr_node->right)),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case TANH_OP  : 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(DIV_OP),
-                                        NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                        NCTOR(TYPE_OP, OP(POW_OP),
-                                                NCTOR(TYPE_OP, OP(COSH_OP),
-                                                    NULL, NCOPY(curr_node->right)),
-                                                NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(DIV_OP),
+                                           NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                           NCTOR(TYPE_OP, OP(POW_OP),
+                                                 NCTOR(TYPE_OP, OP(COSH_OP),
+                                                       NULL, 
+                                                       NCOPY(curr_node->right)),
+                                                 NCTOR(TYPE_NUM, NUM(2), NULL, NULL))),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
                 case LN_OP  : 
                     {
                         return NCTOR(TYPE_OP, OP(MUL_OP),
-                                    NCTOR(TYPE_OP, OP(DIV_OP),
-                                        NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
-                                        NCOPY(curr_node->right)),
-                                    DIFFN(curr_node->right));
+                                     NCTOR(TYPE_OP, OP(DIV_OP),
+                                           NCTOR(TYPE_NUM, NUM(1), NULL, NULL),
+                                           NCOPY(curr_node->right)),
+                                     DIFFN(curr_node->right));
                         break;
                     }
 
@@ -434,253 +426,3 @@ struct Diff_elem_t *DiffPsnArgCtor(void)
 }
 
 
-#define NODE_NUM(node)                       \
-            node->value->diff_arg->num
-
-#define NODE_OP(node)                        \
-            node->value->diff_arg->op
-
-#define NCTOR_UNAR_NUM(oper)                        \
-            NCTOR(TYPE_NUM, NUM(oper##(NODE_NUM(right_node))), NULL, NULL)
-
-#define NCTOR_OPER_NUM(oper)                        \
-            NCTOR(TYPE_NUM, NUM(NODE_NUM(left_node) oper NODE_NUM(right_node)), NULL, NULL)
-
-#define SIMPLIFY_ITER(code)                                      \
-            struct TreeNode *new_node = code;                    \
-            int node_dtor_err = TreeNodeDtor(curr_node);           \
-            ERROR_CHECK(node_dtor_err, NULL);                       \
-            printf("new_node.type = %d, var = %d, num = %lf, op = %d\n",  \
-                    new_node->value->type_arg, new_node->value->diff_arg->var,\
-                    new_node->value->diff_arg->num, new_node->value->diff_arg->op);\
-            return new_node
-
-
-struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
-{
-    ERROR_CHECK(curr_node == NULL, NULL);
-    printf("entered simplify expression, curr_node: %d\n", curr_node);
-
-    struct TreeNode* prev_left  = curr_node->left;
-    struct TreeNode* prev_right = curr_node->right;
-
-    if (curr_node->value->type_arg == TYPE_NUM ||
-        curr_node->value->type_arg == TYPE_VAR)
-        return curr_node;
-    
-    struct TreeNode *left_node = NULL;
-    if (curr_node->left != NULL)
-    {
-        left_node = SimplifyExpression(curr_node->left);
-        ERROR_CHECK(left_node == NULL, NULL);
-    }
-
-    struct TreeNode *right_node = NULL;
-    if (curr_node->right != NULL)
-    {
-        right_node = SimplifyExpression(curr_node->right);
-        ERROR_CHECK(right_node == NULL, NULL);
-    }
-
-    curr_node->left  = left_node;
-    curr_node->right = right_node;
-
-    printf("type_arg = %d, op = %d\n", curr_node->value->type_arg, curr_node->value->diff_arg->op);
-    
-    ERROR_CHECK(curr_node->value->type_arg != TYPE_OP, NULL);
-
-    if (left_node == NULL && right_node != NULL &&
-        right_node->value->type_arg == TYPE_NUM)
-    {
-        switch (curr_node->value->diff_arg->op)
-        {
-            case SIN_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(sin(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case COS_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(cos(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case TAN_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(tan(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case ASIN_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(asin(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case ACOS_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(acos(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case ATAN_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(atan(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case SINH_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(sinh(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case COSH_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(cosh(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case TANH_OP  :  
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(tanh(NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-
-            case LN_OP  :  
-                {
-                    printf("ln-> right_node_num = %lf\n", log(NODE_NUM(right_node)));
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(log(NODE_NUM(right_node))), NULL, NULL));
-                    printf("end ln\n");
-                    break;
-                }
-            default     :
-                    return NULL;
-                    break;
-        }
-    }
-
-    if (left_node != NULL && right_node != NULL &&
-         left_node->value->type_arg == TYPE_NUM &&
-        right_node->value->type_arg == TYPE_NUM)
-    {
-        switch (curr_node->value->diff_arg->op)
-        {
-            case ADD_OP : 
-                {
-                    SIMPLIFY_ITER(NCTOR_OPER_NUM(+));
-                    break;
-                }
-
-            case SUB_OP : 
-                {
-                    SIMPLIFY_ITER(NCTOR_OPER_NUM(-));
-                    break;
-                } 
-
-            case MUL_OP : 
-                {
-                    SIMPLIFY_ITER(NCTOR_OPER_NUM(*));
-                    break;
-                }
-
-            case DIV_OP : 
-                {
-                    SIMPLIFY_ITER(NCTOR_OPER_NUM(/));
-                    break;
-                }
-
-            case POW_OP : 
-                {
-                    SIMPLIFY_ITER(NCTOR(TYPE_NUM, NUM(pow(NODE_NUM(left_node), 
-                                                          NODE_NUM(right_node))), NULL, NULL));
-                    break;
-                }
-            default : return NULL;
-                    break;
-        }
-    }
-
-    // 0 * (..) | (..) * 0 | 0 / (..) = 0
-    if (left_node != NULL && right_node != NULL &&
-        (NODE_OP(curr_node) == MUL_OP || NODE_OP(curr_node) == DIV_OP) &&
-        ((left_node->value->type_arg == TYPE_NUM && 
-         COMPARE_DOUBLE(NODE_NUM(left_node),  0))   ||
-        (right_node->value->type_arg == TYPE_NUM &&
-         COMPARE_DOUBLE(NODE_NUM(right_node), 0))))
-    {
-        struct TreeNode *new_node = NCTOR(TYPE_NUM, NUM(0), NULL, NULL);
-        int node_dtor_err = TreeNodeDtor(curr_node);
-        ERROR_CHECK(node_dtor_err, NULL);
-        return new_node;
-    }
-
-    // (..) ^ 0 = 1 (0^0 exist previosly) || 1 ^ (..)
-    if (left_node != NULL && right_node != NULL  &&
-         NODE_OP(curr_node) == POW_OP &&
-        ((right_node->value->type_arg == TYPE_NUM &&
-         COMPARE_DOUBLE(NODE_NUM(right_node), 0)) || 
-
-        (left_node->value->type_arg   == TYPE_NUM &&
-         COMPARE_DOUBLE(NODE_NUM(left_node),  1))))
-    {
-        struct TreeNode *new_node = NCTOR(TYPE_NUM, NUM(1), NULL, NULL);
-        int node_dtor_err = TreeNodeDtor(curr_node);
-        ERROR_CHECK(node_dtor_err, NULL);
-        return new_node;
-    }
-
-    //(..) * 1 || (..) / 1 || (..) ^ 1 || (..) + 0 || (..) - 0 = (..)
-    if (left_node != NULL && right_node != NULL &&
-        (((NODE_OP(curr_node) == MUL_OP  || 
-          NODE_OP(curr_node) == DIV_OP  ||
-          NODE_OP(curr_node) == POW_OP)          &&
-        (right_node->value->type_arg == TYPE_NUM &&
-         COMPARE_DOUBLE(NODE_NUM(right_node), 1)))  || 
-        ((NODE_OP(curr_node) == ADD_OP  ||
-          NODE_OP(curr_node) == SUB_OP)          &&
-        (right_node->value->type_arg == TYPE_NUM &&
-         COMPARE_DOUBLE(NODE_NUM(right_node), 0)))))
-    {
-        struct TreeNode *new_node = NCOPY(curr_node->left);
-        int node_dtor_err = TreeNodeDtor(curr_node);
-        ERROR_CHECK(node_dtor_err, NULL);
-        return new_node;
-    }
-
-    // 1 * (..) || 0 + (..)  = (..)
-    if (left_node != NULL && right_node != NULL &&
-        ((NODE_OP(curr_node) == MUL_OP &&
-        left_node->value->type_arg == TYPE_NUM &&
-        COMPARE_DOUBLE(NODE_NUM(left_node), 1)) ||
-        (NODE_OP(curr_node) == ADD_OP &&
-        left_node->value->type_arg == TYPE_NUM &&
-        COMPARE_DOUBLE(NODE_NUM(left_node), 0))))
-    {
-        struct TreeNode *new_node = NCOPY(curr_node->right);
-        int node_dtor_err = TreeNodeDtor(curr_node);
-        ERROR_CHECK(node_dtor_err, NULL);
-        return new_node;
-    }
-
-    if (left_node != NULL)
-    {
-        int tree_tie_err = TreeNodeTie(curr_node, left_node, TREE_TIE_LEFT);
-        ERROR_CHECK(tree_tie_err, NULL);
-    }
-        
-    if (right_node != NULL)
-    {
-        int tree_tie_err = TreeNodeTie(curr_node, right_node, TREE_TIE_RIGHT);
-        ERROR_CHECK(tree_tie_err, NULL);
-    }
-
-    
-    if (left_node  != prev_left ||
-        right_node != prev_right)
-        return SimplifyExpression(curr_node);
-    
-    printf("do nothing\n");
-    return curr_node;
-}

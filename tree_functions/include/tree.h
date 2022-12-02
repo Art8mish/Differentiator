@@ -149,6 +149,7 @@ struct Tree
 
 struct Tree *TreeCtor(void);
 int TreeDtor(struct Tree *tree);
+
 int TreeNodeDtor(struct TreeNode *curr_node);
 struct TreeNode *TreeNodeCtor(tree_elem_t arg, struct TreeNode *left_node, struct TreeNode *right_node);
 
@@ -168,8 +169,8 @@ int TreeCheckError(struct Tree *tree);
 
 int TreeDump(const struct Tree *tree, const char *comment = NULL, bool debug = false,
              const char *file_name = NULL, int line_num = 0, const char *func_name = NULL);
-int TreeNodeDump(struct TreeNode *curr_node, const char *comment, bool debug,
-                 const char *file_name, int line_num, const char *func_name);
+int TreeNodeDump(struct TreeNode *curr_node, const char *comment = NULL, bool debug = false,
+                 const char *file_name = NULL, int line_num = 0, const char *func_names = NULL);
 
 int CreateTreeGraph(const struct Tree *tree);
 int SaveTreeGraphPng(void);
@@ -182,8 +183,6 @@ int SerializeNode(FILE *tree_f, const struct TreeNode *curr_node);
 struct Tree *TreeDeserialize(const char *input_file_name);
 int DeserializeNode(struct Tree *new_tree, struct TreeNode **parent_node, 
                     char **buf, int recur_level);
-
-size_t ConvertStrToNum(const char **string, double *num);
 
 
 #endif //TREE_H_INCLUDED

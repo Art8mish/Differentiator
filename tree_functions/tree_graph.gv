@@ -1,17 +1,11 @@
 digraph tree{
 	rankdir=TB;
 spline = ortho;
-	9980304[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9980304 |<f3>parent 0x0}|OP: ln (16), num = 0.000000, var = 0|{<f2>left_yes 0x0 | <f1>rght_no 0x9980136}}"]
-	9980304:<f1>:s->9980136:<f0>:n[weight = 1, constraint=true, style="dashed"]
-	9980136[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9980136 |<f3>parent 0x9980304}|OP: + (1), num = 0.000000, var = 0|{<f2>left_yes 0x9979632 | <f1>rght_no 0x9979968}}"]
-	9980136:<f2>:s->9979632:<f0>:n[weight = 1, constraint=true, style="dashed"]
-	9980136:<f1>:s->9979968:<f0>:n[weight = 1, constraint=true, style="dashed"]
-	9979968[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9979968 |<f3>parent 0x9980136}|OP: sin (6), num = 0.000000, var = 0|{<f2>left_yes 0x0 | <f1>rght_no 0x9979800}}"]
-	9979968:<f1>:s->9979800:<f0>:n[weight = 1, constraint=true, style="dashed"]
-	9979800[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9979800 |<f3>parent 0x9979968}|VAR: PSN  (0), num = 0.000000, var = x|{<f2>left_yes 0x0 | <f1>rght_no 0x0}}"]
-	9979632[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9979632 |<f3>parent 0x9980136}|OP: + (1), num = 0.000000, var = 0|{<f2>left_yes 0x9979296 | <f1>rght_no 0x9979464}}"]
-	9979632:<f2>:s->9979296:<f0>:n[weight = 1, constraint=true, style="dashed"]
-	9979632:<f1>:s->9979464:<f0>:n[weight = 1, constraint=true, style="dashed"]
-	9979464[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9979464 |<f3>parent 0x9979632}|NUM: PSN  (0), num = 2.718282, var = 0|{<f2>left_yes 0x0 | <f1>rght_no 0x0}}"]
-	9979296[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9979296 |<f3>parent 0x9979632}|VAR: PSN  (0), num = 0.000000, var = x|{<f2>left_yes 0x0 | <f1>rght_no 0x0}}"]
+	9586488[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9586488 |<f3>parent 0x0}|OP: ln (16), num = 0.000000, var = 0|{<f2>left_yes 0x0 | <f1>rght_no 0x9586320}}"]
+	9586488:<f1>:s->9586320:<f0>:n[weight = 1, constraint=true, style="dashed"]
+	9586320[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9586320 |<f3>parent 0x9586488}|OP: + (1), num = 0.000000, var = 0|{<f2>left_yes 0x9585984 | <f1>rght_no 0x9586152}}"]
+	9586320:<f2>:s->9585984:<f0>:n[weight = 1, constraint=true, style="dashed"]
+	9586320:<f1>:s->9586152:<f0>:n[weight = 1, constraint=true, style="dashed"]
+	9586152[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9586152 |<f3>parent 0x9586320}|NUM: PSN  (0), num = 1.000000, var = 0|{<f2>left_yes 0x0 | <f1>rght_no 0x0}}"]
+	9585984[style="filled",fillcolor="peachpuff"shape=record,color=red3,label="{{<f0> 0x9585984 |<f3>parent 0x9586320}|VAR: PSN  (0), num = 0.000000, var = x|{<f2>left_yes 0x0 | <f1>rght_no 0x0}}"]
 }

@@ -1,33 +1,85 @@
  
 #include "../include/diff.h"
 
+int GetStartValues(double *point, int *diff_dgr, int *taylor_dgr)
+{
+    ERROR_CHECK(point      == NULL, ERROR_NULL_PTR);
+    ERROR_CHECK(diff_dgr   == NULL, ERROR_NULL_PTR);
+    ERROR_CHECK(taylor_dgr == NULL, ERROR_NULL_PTR);
+
+    printf("Enter x value: ");
+                                                                   
+    bool correct_input = false;                                          
+    while (!correct_input)                                               
+    {                                                                    
+        int scanf_ret = scanf(" %lf", point); 
+        if (scanf_ret)                                   
+            correct_input = true;                                        
+        int ch = 0;                                                      
+        while ((ch = getchar()) != '\n')                                 
+            if (!isspace(ch))                                            
+                correct_input = false;                                   
+        if (!correct_input)                                              
+            printf("I do not understand.\nEnter correct value..\n");   
+    }    
+
+    printf("Enter differentiation degree: ");   
+    correct_input = false;
+    while (!correct_input)                                               
+    {                                                                    
+        int scanf_ret = scanf(" %d", diff_dgr); 
+        if (scanf_ret && *diff_dgr >= 0)                                  
+            correct_input = true;                                        
+        int ch = 0;                                                      
+        while ((ch = getchar()) != '\n')                                 
+            if (!isspace(ch))                                            
+                correct_input = false;                                   
+        if (!correct_input)                                              
+            printf("I do not understand.\nEnter correct value..\n");   
+    } 
+
+    printf("Enter maximum Taylor degree: ");
+    correct_input = false;   
+    while (!correct_input)                                               
+    {                                                                    
+        int scanf_ret = scanf(" %d", taylor_dgr); 
+        if (scanf_ret && *taylor_dgr >= 0)                                
+            correct_input = true;                                        
+        int ch = 0;                                                      
+        while ((ch = getchar()) != '\n')                                 
+            if (!isspace(ch))                                            
+                correct_input = false;                                   
+        if (!correct_input)                                              
+            printf("I do not understand.\nEnter correct value..\n");   
+    } 
+
+    return SUCCESS;
+}
+
 int CreateMatanManual(struct Tree *expr, char var, diff_num_t point, 
                       unsigned int diff_dgr, unsigned int taylor_dgr)
 {
     ERROR_CHECK(expr == NULL, ERROR_NULL_PTR);
 
-    FILE *tex_f = fopen(TEX_FILE_PATH, "w");
+    FILE *tex_f = fopen(TEX_FILE_PATH, "wb");
     ERROR_CHECK(tex_f == NULL, ERROR_OPENING_FILE);
     
     struct stat file_stat;
     int stat_err = stat(FOREWORD_FILE_PATH, &file_stat); 
-    ERROR_CHECK(stat_err == -1, ERROR_STAT);
+    FILE_ERROR_CHECK(stat_err == -1, ERROR_STAT, tex_f);
 
     char *foreword = (char *) calloc(file_stat.st_size, sizeof(char));
-    ERROR_CHECK(foreword == NULL, ERROR_CALLOC);
+    FILE_ERROR_CHECK(foreword == NULL, ERROR_CALLOC, tex_f);
 
-    FILE *foreword_f = fopen(FOREWORD_FILE_PATH, "r");
-    ERROR_CHECK(foreword_f == NULL, ERROR_OPENING_FILE);
+    FILE *foreword_f = fopen(FOREWORD_FILE_PATH, "rb");
+    FILE_ERROR_CHECK(foreword_f == NULL, ERROR_OPENING_FILE, tex_f);
 
-    struct WorkingField *onegin_context = CreateWorkingField(FOREWORD_FILE_PATH);
-    ERROR_CHECK(onegin_context == NULL, NULL);
+    fread (foreword, sizeof(char), file_stat.st_size - 1, foreword_f);
+    fwrite(foreword, sizeof(char), file_stat.st_size - 1, tex_f);
 
-    fread (foreword, sizeof(char), file_stat.st_size - 3900, foreword_f);
-    fwrite(foreword, sizeof(char), file_stat.st_size - 3900, tex_f);
     free(foreword);
     fclose(foreword_f);
 
-    printf("go!\n");
     fprintf(tex_f, "\n\\newpage \n \\section{Анализ функции} \n"
                    "Теперь можно перейти к анализу заданной функции: \n"
                    "\\begin{equation}\n f(%c) = ", var);
@@ -108,7 +160,6 @@ int CreateMatanManual(struct Tree *expr, char var, diff_num_t point,
     fprintf(tex_f, "\\end{eqnarray} \n");
 
 //значение n-ой производной f в точке
-
     diff_val_at_point = DIFF_NUM_PSN;
     count_val_at_point_err = CountValueAtPoint(diff_node, var, point, &diff_val_at_point);
     ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT);
@@ -117,7 +168,6 @@ int CreateMatanManual(struct Tree *expr, char var, diff_num_t point,
                     var, point, diff_dgr, var, diff_val_at_point);
 
 //разложение в Ряд Тейлора
-
     fprintf(tex_f, "\\subsection{Разложение по формуле Тейлора} \n ");
     fprintf(tex_f, "Разложим функцию по формуле Тейлора в точке $%g$ до $x^{%d}$: \n",
                     point, taylor_dgr);
@@ -133,7 +183,6 @@ int CreateMatanManual(struct Tree *expr, char var, diff_num_t point,
 
 
 //Подсчет погрешности
-
     int add_tex_lab_err = AddTexLabError(tex_f);
     ERROR_CHECK(add_tex_lab_err, ERROR_ADD_TEX_LAB);
 
@@ -179,13 +228,6 @@ int TexSerializeNode(FILE *tex_f, const struct TreeNode *curr_node)
 
     bool print_op = false;
     
-
-    /*
-    static int symb_count = 0;
-    symb_count++;
-    if (symb_count % MAX_SYMB_IN_LINE == 0)
-        fprintf(tex_f, "\\nonumber\\\\\n");*/
-
     switch (curr_node->value->type_arg)
     {
         case TYPE_PSN : fprintf(tex_f, " TYPE_PSN ");

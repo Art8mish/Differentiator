@@ -1,1 +1,1 @@
-ln(x + e + sin(x))
+ln(x+1)
