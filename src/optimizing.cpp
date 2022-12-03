@@ -4,7 +4,6 @@
 struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
 {
     ERROR_CHECK(curr_node == NULL, NULL);
-    printf("entered simplify expression, curr_node: %d\n", curr_node);
 
     struct TreeNode* prev_left  = curr_node->left;
     struct TreeNode* prev_right = curr_node->right;
@@ -29,8 +28,6 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
 
     curr_node->left  = left_node;
     curr_node->right = right_node;
-
-    printf("type_arg = %d, op = %d\n", curr_node->value->type_arg, curr_node->value->diff_arg->op);
     
     ERROR_CHECK(curr_node->value->type_arg != TYPE_OP, NULL);
 
@@ -63,16 +60,13 @@ struct TreeNode *SimplifyExpression(struct TreeNode *curr_node)
         int tree_tie_err = TreeNodeTie(curr_node, right_node, TREE_TIE_RIGHT);
         ERROR_CHECK(tree_tie_err, NULL);
     }
-
     
     if (left_node  != prev_left ||
         right_node != prev_right)
         return SimplifyExpression(curr_node);
     
-    printf("do nothing\n");
     return curr_node;
 }
-
 
 struct TreeNode *OptimizeUnarFunc(struct TreeNode *curr_node, struct TreeNode *right_node)
 {

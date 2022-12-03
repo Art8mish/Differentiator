@@ -22,11 +22,10 @@ struct TreeNode *DiffNodeCtor(TypeDiffArg type_value,     struct Diff_elem_t *va
     return curr_node;
 }
 
-
 struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var)
 {
     ERROR_CHECK(curr_node == NULL, NULL);
-
+    printf("differentiating...\n");
 
     switch (curr_node->value->type_arg)
     {
@@ -58,7 +57,8 @@ struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var)
                     {
                         return NULL;
                         break;
-                    }    
+                    }
+                        
                 case ADD_OP : 
                     {   
                         return NCTOR(TYPE_OP, OP(ADD_OP),
@@ -112,7 +112,6 @@ struct TreeNode *DifferentiateNode(struct TreeNode *curr_node, char var)
                         ERROR_CHECK(find_var_err, NULL);
                             find_var_err = FindVar(curr_node->right, var, &right_is_const);
                         ERROR_CHECK(find_var_err, NULL);  
-                        printf("left = %d, right = %d\n", left_is_const, right_is_const);
 
                         if (!left_is_const && !right_is_const)
                             return  DIFFN(NCTOR(TYPE_OP, OP(POW_OP),
