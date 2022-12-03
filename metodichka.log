@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.11.25) (preloaded format=pdflatex 2022.11.27)  2 DEC 2022 02:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.11.25) (preloaded format=pdflatex 2022.11.27)  3 DEC 2022 15:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -12527,6 +12527,11 @@ LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3846.
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3846.
+
+Overfull \hbox (398.53787pt too wide) in alignment at lines 3845--3846
+ [][][] []
+ []
+
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3846.
 
@@ -12539,26 +12544,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 3846--3848
 
  []
 
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3848.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3848.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3848.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3848.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3849.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3849.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3849.
 
-Underfull \hbox (badness 10000) in paragraph at lines 3846--3848
-
+Overfull \hbox (382.72205pt too wide) in alignment at lines 3848--3849
+ [][][] []
  []
 
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
-ine 3848.
-LaTeX Font Info:    No math alphabet change to frozen version normal on input l
-ine 3848.
-LaTeX Font Info:    No math alphabet change to frozen version normal on input l
-ine 3848.
-LaTeX Font Info:    No math alphabet change to frozen version normal on input l
-ine 3848.
-LaTeX Font Info:    No math alphabet change to frozen version normal on input l
-ine 3849.
-LaTeX Font Info:    No math alphabet change to frozen version normal on input l
-ine 3849.
-LaTeX Font Info:    No math alphabet change to frozen version normal on input l
-ine 3849.
-LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3849.
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3850.
@@ -12582,6 +12587,13 @@ LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3855.
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3855.
+! You can't use `macro parameter character #' in math mode.
+<argument> -1.##
+                IND
+l.3855  + \frac{-1.#IND}{24}
+                             \cdot (x)^{4}\nonumber\\
+? q
+OK, entering \batchmode...
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3856.
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
@@ -12606,13 +12618,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3858--3859
 
  []
 
-[102] [103 <./graphic.png>]
+ [102] [103 <./graphic.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 3862--3863
 
  []
 
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3863.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3864.
+LaTeX Font Info:    No math alphabet change to frozen version normal on input l
+ine 3864.
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3864.
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
@@ -12632,23 +12648,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3863--3864
 
 LaTeX Font Info:    No math alphabet change to frozen version normal on input l
 ine 3864.
-[104] (metodichka.aux)
+ [104] (metodichka.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-Package rerunfilecheck Warning: File `metodichka.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `metodichka.out':
-(rerunfilecheck)             Before: 4D56A6DF7BF3D8DB2657AA920E15BEE1;37661
-(rerunfilecheck)             After:  80E71B5437E2333241400595E75F0608;37661.
+Package rerunfilecheck Info: File `metodichka.out' has not changed.
+(rerunfilecheck)             Checksum: A2B7678277D57888710DB5699430E806;37661.
  ) 
 Here is how much of TeX's memory you used:
  26968 strings out of 477842
  502471 string characters out of 2821223
- 787849 words of memory out of 3000000
+ 787850 words of memory out of 3000000
  45019 multiletter control sequences out of 15000+600000
  503218 words of font info for 123 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -12684,7 +12694,7 @@ ms/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><C:/Users/Артём/A
 ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:
 /Users/Артём/AppData/Local/Programs/MiKTeX/fonts/type1/public/rsfs/rsfs10.
 pfb>
-Output written on metodichka.pdf (105 pages, 1372272 bytes).
+Output written on metodichka.pdf (105 pages, 1373792 bytes).
 PDF statistics:
  1544 PDF objects out of 1728 (max. 8388607)
  339 named destinations out of 1000 (max. 500000)

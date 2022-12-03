@@ -145,8 +145,11 @@ int TreeNodeTie(struct TreeNode *parent_node,
                 break;
             }
     
-        default:    return ERROR_WRONG_TREE_INSERT_PATH;
-                    break;
+        default: 
+            {
+                return ERROR_WRONG_TREE_INSERT_PATH;
+                break;
+            }
     }
 
     return SUCCESS;
@@ -391,7 +394,6 @@ struct Tree *TreeDeserialize(const char *input_file_name)
     struct DiffLexicalElem *lex_structs = LexicalAnalisis(buf);
     ERROR_CHECK(lex_structs == NULL, NULL);*/
    
-    printf("buf = %s\n", buf);
     new_tree->root = ReadExpression(buf);
     ERROR_CHECK(new_tree->root == NULL, NULL);
 

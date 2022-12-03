@@ -1,5 +1,6 @@
-f = x + y^2 - z
-vamount = 3
+f = (x^3 * z) / (y^2 - u)
+vamount = 4
 x = 5, dx = 0.01
 y = 2, dy = 0.02
 z = 3, dz = 0.03
+u = 2, du = 0.02

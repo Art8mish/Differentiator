@@ -84,35 +84,33 @@ int CreateMatanManual(struct Tree *expr, char var, diff_num_t point,
                    "Теперь можно перейти к анализу заданной функции: \n"
                    "\\begin{equation}\n f(%c) = ", var);
     int serialize_node_err = TexSerializeNode(tex_f, expr->root);
-    ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE);    
+    FILE_ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE, tex_f);    
     fprintf(tex_f, "\\end{equation}\n");   
 
 //значение f в точке
     TREEDUMP(expr, "first");
     
-    printf("znach f v tochke...........................................\n");
     diff_num_t val_at_point = DIFF_NUM_PSN; 
     int count_val_at_point_err = CountValueAtPoint(expr->root, var, point, &val_at_point);
-    ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT);
+    FILE_ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT, tex_f);
     fprintf(tex_f, "Значение функции в точке $%c_0 = %g$:  $f(%c_0) = %g$ \\\\ \n", 
                     var, point, var, val_at_point);
-    printf("val_at_point = %lf\n", val_at_point);
 
 //касательная к f в точке
     fprintf(tex_f, "\\subsection{Касательная к графику функции в точке} \n ");
 
     TREEDUMP(expr, "scnd");
-    printf("kas in tochka...........................................\n");
+
     diff_num_t val_at_null = DIFF_NUM_PSN;
     count_val_at_point_err = CountValueAtPoint(expr->root, var, 0, &val_at_null);
-    ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT);
+    FILE_ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT, tex_f);
 
     struct TreeNode *diff_expr_node = DifferentiateNode(expr->root, var);
-    ERROR_CHECK(diff_expr_node == NULL, ERROR_TREE_NODE_COPY);
+    FILE_ERROR_CHECK(diff_expr_node == NULL, ERROR_TREE_NODE_COPY, tex_f);
 
     diff_num_t diff_val_at_point = DIFF_NUM_PSN;
     count_val_at_point_err = CountValueAtPoint(diff_expr_node, var, point, &diff_val_at_point);
-    ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT);
+    FILE_ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT, tex_f);
 
     fprintf(tex_f, "Уравнение касательной к графику функции в точке $%c_0 = %g$:"
                    "\\[ y = %g \\cdot x + (%g)\\]\n", 
@@ -121,29 +119,29 @@ int CreateMatanManual(struct Tree *expr, char var, diff_num_t point,
 //Производная n-ой степени
     fprintf(tex_f, "\\subsection{Производная %d-ой степени} \n ", diff_dgr);
     fprintf(tex_f, "Из предисловия нетрудно заметить, что \n");
-    printf("proizvodnaya.................................\n");
+
     struct TreeNode *diff_node = expr->root;
-    ERROR_CHECK(diff_node == NULL, ERROR_DIFFERENTIATE_NODE);
+    FILE_ERROR_CHECK(diff_node == NULL, ERROR_DIFFERENTIATE_NODE, tex_f);
 
     for (unsigned int i = 0; i < diff_dgr; i++)
     {
         struct TreeNode *extra_diff_node = DifferentiateNode(diff_node, var);
-        ERROR_CHECK(extra_diff_node == NULL, ERROR_DIFFERENTIATE_NODE);
+        FILE_ERROR_CHECK(extra_diff_node == NULL, ERROR_DIFFERENTIATE_NODE, tex_f);
 
         if (i != 0)
         {
             int node_dtor_err = TreeNodeDtor(diff_node);
-            ERROR_CHECK(node_dtor_err, ERROR_TREE_NODE_DTOR);
+            FILE_ERROR_CHECK(node_dtor_err, ERROR_TREE_NODE_DTOR, tex_f);
         }
 
         diff_node = SimplifyExpression(extra_diff_node);
-        ERROR_CHECK(diff_node == NULL, ERROR_SIMPLIFY_EXPRESSION);
+        FILE_ERROR_CHECK(diff_node == NULL, ERROR_SIMPLIFY_EXPRESSION, tex_f);
 
         if (i < MAX_PRINTED_DIFF_DGR)
         {
             fprintf(tex_f, "\\begin{eqnarray}\n f^{(%d)}(%c) = ", i+1, var);
             serialize_node_err = TexSerializeNode(tex_f, diff_node);
-            ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE); 
+            FILE_ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE, tex_f); 
             fprintf(tex_f, "\\end{eqnarray}\\\\\n");
         }
     }
@@ -156,13 +154,13 @@ int CreateMatanManual(struct Tree *expr, char var, diff_num_t point,
     fprintf(tex_f, "\\begin{eqnarray} \nf^{(%d)} = ", diff_dgr);
 
     serialize_node_err = TexSerializeNode(tex_f, diff_node);
-    ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE); 
+    FILE_ERROR_CHECK(serialize_node_err, ERROR_SERIALIZE_NODE, tex_f); 
     fprintf(tex_f, "\\end{eqnarray} \n");
 
 //значение n-ой производной f в точке
     diff_val_at_point = DIFF_NUM_PSN;
     count_val_at_point_err = CountValueAtPoint(diff_node, var, point, &diff_val_at_point);
-    ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT);
+    FILE_ERROR_CHECK(count_val_at_point_err, ERROR_COUNT_VAL_AT_POINT, tex_f);
 
     fprintf(tex_f, "\\\\В точке $%c_0 = %g$:  $f^{(%d)}(%c_0) = %g$\n", 
                     var, point, diff_dgr, var, diff_val_at_point);
@@ -172,19 +170,19 @@ int CreateMatanManual(struct Tree *expr, char var, diff_num_t point,
     fprintf(tex_f, "Разложим функцию по формуле Тейлора в точке $%g$ до $x^{%d}$: \n",
                     point, taylor_dgr);
     int taylor_err = ExpandInTaylor(tex_f, expr->root, var, point, taylor_dgr);
-    ERROR_CHECK(taylor_err, ERROR_EXPAND_TAYLOR);
+    FILE_ERROR_CHECK(taylor_err, ERROR_EXPAND_TAYLOR, tex_f);
 
 //Вставить график
     fprintf(tex_f, "\\subsection{График функции} \n ");
     int make_graph_err = MakeGraphicFile(expr->root);
-    ERROR_CHECK(make_graph_err, ERROR_MAKE_GRAPHIC_FILE);
+    FILE_ERROR_CHECK(make_graph_err, ERROR_MAKE_GRAPHIC_FILE, tex_f);
 
     fprintf(tex_f, "\\includegraphics{%s}\\\\\n", GRAPHIC_FILE_PATH);
 
 
 //Подсчет погрешности
     int add_tex_lab_err = AddTexLabError(tex_f);
-    ERROR_CHECK(add_tex_lab_err, ERROR_ADD_TEX_LAB);
+    FILE_ERROR_CHECK(add_tex_lab_err, ERROR_ADD_TEX_LAB, tex_f);
 
     fprintf(tex_f, "\\end{document}\n");
     fclose(tex_f);
@@ -198,25 +196,21 @@ int CountValueAtPoint(struct TreeNode *expr_node, char var, diff_num_t point,
 {
     ERROR_CHECK(expr_node == NULL, ERROR_NULL_PTR);
     ERROR_CHECK(value     == NULL, ERROR_NULL_PTR);
-    printf("entered count value\n");
 
     struct TreeNode *copy_expr_node = TreeNodeCopy(expr_node);
     ERROR_CHECK(copy_expr_node == NULL, ERROR_TREE_NODE_COPY);
 
     int frame_var_err = FrameVar(copy_expr_node, var, point);
     ERROR_CHECK(frame_var_err, ERROR_FRAME_VAR);
-    printf("continue count value1..\n");
 
     copy_expr_node = SimplifyExpression(copy_expr_node);
     ERROR_CHECK(copy_expr_node == NULL, ERROR_SIMPLIFY_EXPRESSION);
-    printf("continue count value2..\n");
+
     ERROR_CHECK(copy_expr_node->value->type_arg != TYPE_NUM, ERROR_FRAME_VAR);
     *value = copy_expr_node->value->diff_arg->num;
 
-    printf("dtoring num_node:\n");
     int node_dtor_err = TreeNodeDtor(copy_expr_node);
     ERROR_CHECK(node_dtor_err, ERROR_TREE_NODE_DTOR);
-    printf("finish count value\n");
 
     return SUCCESS;
 } 
@@ -427,7 +421,6 @@ struct Tree *LabDeserialize(const char *input_file_name, char *main_var,
     sscanf(buf, " %c %*c%n", main_var, &n);
     buf += n;
 
-    printf("buf: %s\n", buf);
     new_tree->root = ReadExpression(buf);
     ERROR_CHECK(new_tree->root == NULL, NULL);
     
@@ -437,7 +430,7 @@ struct Tree *LabDeserialize(const char *input_file_name, char *main_var,
     
     sscanf(buf, " %*s = %d%n", var_amount, &n);
     buf += n;
-    printf("var_amount = %d\n", *var_amount);
+
     SKIP_SPACE(buf, NULL);
 
     *vars = (struct DiffVar *) calloc(*var_amount, sizeof(struct DiffVar));
@@ -448,11 +441,9 @@ struct Tree *LabDeserialize(const char *input_file_name, char *main_var,
         char var   = 0;
         diff_num_t var_val = 0;
         diff_num_t var_err_val = 0; 
-        printf("buf: %s\n", buf);
+
         sscanf(buf, " %c = %lf, %*s = %lf%n", &var, &var_val, &var_err_val, &n);
         buf += n;
-
-        printf("var = %c, var_val = %g, var_err_val = %g\n", var, var_val, var_err_val);
 
         (*vars)[i].var     = var;
         (*vars)[i].point   = var_val;
@@ -560,6 +551,7 @@ int MakeGraphicFile(struct TreeNode *curr_node)
     fprintf(gnu_f, "set terminal png size 400,300 enhanced font \"Arial,10\"\n");
     fprintf(gnu_f, "set output '%s'\n", GRAPHIC_FILE_PATH);
     fprintf(gnu_f, "plot ");
+    
     int save_node_err = SerializeNode(gnu_f, curr_node);
     FILE_ERROR_CHECK(save_node_err, ERROR_SAVE_NODE, gnu_f);
 

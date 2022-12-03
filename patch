@@ -1514,63 +1514,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 3837--3839
 Underfull \hbox (badness 10000) in paragraph at lines 3844--3845
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3846--3848
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 3846--3848
-
+Overfull \hbox (398.53787pt too wide) in alignment at lines 3845--3846
+ [][][] []
 
 Underfull \hbox (badness 10000) in paragraph at lines 3846--3848
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3858--3859
-
-[102] [103 <./graphic.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 3862--3863
+Underfull \hbox (badness 10000) in paragraph at lines 3846--3848
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3863--3864
-
-[104] (metodichka.aux)
-
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
-
-Package rerunfilecheck Warning: File `metodichka.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
- )
-(see the transcript file for additional information) <C:\Users\Артём\AppDa
-ta\Local\MiKTeX\fonts/pk/ljfour/public/wasy/dpi720\wasy10.pk> <C:\Users\Арт�
-�м\AppData\Local\MiKTeX\fonts/pk/ljfour/lh/lh-t2a/dpi600\labx0800.pk> <C:\User
-s\Артём\AppData\Local\MiKTeX\fonts/pk/ljfour/lh/lh-t2a/dpi600\larm0800.pk>
- <C:\Users\Артём\AppData\Local\MiKTeX\fonts/pk/ljfour/lh/lh-t2a/dpi600\lab
-x1440.pk> <C:\Users\Артём\AppData\Local\MiKTeX\fonts/pk/ljfour/lh/lh-t2a/d
-pi600\labx1200.pk> <C:\Users\Артём\AppData\Local\MiKTeX\fonts/pk/ljfour/lh
-/lh-t2a/dpi600\lati1200.pk> <C:\Users\Артём\AppData\Local\MiKTeX\fonts/pk/
-ljfour/lh/lh-t2a/dpi600\labx1728.pk> <C:\Users\Артём\AppData\Local\MiKTeX\
-fonts/pk/ljfour/lh/lh-t2a/dpi600\larm1200.pk> <C:\Users\Артём\AppData\Loca
-l\MiKTeX\fonts/pk/ljfour/lh/lh-t2a/dpi600\laxc2074.pk><C:/Users/Артём/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/�
-�ртём/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.p
-fb><C:/Users/Артём/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmmi10.pfb><C:/Users/Артём/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/amsfonts/cm/cmmi12.pfb><C:/Users/Артём/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Артём/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Артём/A
-ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users
-/Артём/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.p
-fb><C:/Users/Артём/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmr8.pfb><C:/Users/Артём/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmsy10.pfb><C:/Users/Артём/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Артём/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Артём/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/doublestroke/dsrom12.pfb><C:/User
-s/Артём/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/euler/eu
-rm10.pfb><C:/Users/Артём/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/symbols/msam10.pfb><C:/Users/Артём/AppData/Local/Programs/MiKTeX/
-fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Артём/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on metodichka.pdf (105 pages, 1372272 bytes).
-Transcript written on metodichka.log.
+Overfull \hbox (382.72205pt too wide) in alignment at lines 3848--3849
+ [][][] []
+! You can't use `macro parameter character #' in math mode.
+<argument> -1.##
+                IND
+l.3855  + \frac{-1.#IND}{24}
+                             \cdot (x)^{4}\nonumber\\
+? OK, entering \batchmode
